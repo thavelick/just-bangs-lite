@@ -23,6 +23,10 @@ check: # Check formatting and linting with Biome
 	@echo "Checking formatting and linting.."
 	npx @biomejs/biome check .
 
+test: # Run unit tests with Jest
+	@echo "Running tests.."
+	npx jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+
 # -----------------------------------------------------------
 # CAUTION: If you have a file with the same name as make
 # command, you need to add it to .PHONY below, otherwise it
