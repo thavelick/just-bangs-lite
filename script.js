@@ -1,5 +1,3 @@
-const searchInput = document.getElementById('searchInput');
-
 const bangs = [
   {
     "t": "al",
@@ -109,42 +107,55 @@ function processBang(query) {
   return `https://lite.duckduckgo.com/lite?q=${encodeURIComponent(trimmed)}&kl=us-en`;
 }
 
-function performSearch() {
-  const query = searchInput.value;
-  const url = processBang(query);
-  if (url) {
-    window.location.hash = '#q=' + encodeURIComponent(query);
-    window.location.href = url;
-  }
+function getQueryParam(key) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key);
 }
 
-document.getElementById('searchButton').addEventListener('click', performSearch);
+function redirect(url) {
+  window.location.href = url;
+}
 
-searchInput.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    performSearch();
+function setupUI() {
+  const searchInput = document.getElementById('searchInput');
+  
+  function performSearch() {
+    const query = searchInput.value;
+    const url = processBang(query);
+    if (url) {
+      window.location.hash = '#q=' + encodeURIComponent(query);
+      redirect(url);
+    }
   }
-});
 
-// Check for query parameter immediately and redirect
-const urlParams = new URLSearchParams(window.location.search);
-const queryParam = urlParams.get('q');
+  document.getElementById('searchButton').addEventListener('click', performSearch);
 
-if (queryParam) {
-  const url = processBang(queryParam);
-  if (url) {
-    window.location.href = url;
-  }
-} else {
-  // Only set up UI interactions if not redirecting
-  window.addEventListener('load', function() {
-    if (window.location.hash) {
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const hashQuery = hashParams.get('q');
-      if (hashQuery) {
-        searchInput.value = decodeURIComponent(hashQuery);
-      }
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      performSearch();
     }
   });
+
+  if (window.location.hash) {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const hashQuery = hashParams.get('q');
+    if (hashQuery) {
+      searchInput.value = decodeURIComponent(hashQuery);
+    }
+  }
 }
+
+function initialize() {
+  const queryParam = getQueryParam('q');
+  if (queryParam) {
+    const url = processBang(queryParam);
+    if (url) {
+      redirect(url);
+    }
+  } else {
+    document.addEventListener('DOMContentLoaded', setupUI);
+  }
+}
+
+initialize();
