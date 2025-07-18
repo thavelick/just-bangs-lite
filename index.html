@@ -214,21 +214,27 @@
       }
     });
 
-    window.addEventListener('load', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const queryParam = urlParams.get('q');
-      
-      if (queryParam) {
-        searchInput.value = queryParam;
-        performSearch();
-      } else if (window.location.hash) {
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const hashQuery = hashParams.get('q');
-        if (hashQuery) {
-          searchInput.value = decodeURIComponent(hashQuery);
-        }
+    // Check for query parameter immediately and redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+    
+    if (queryParam) {
+      const url = processBang(queryParam);
+      if (url) {
+        window.location.href = url;
       }
-    });
+    } else {
+      // Only set up UI interactions if not redirecting
+      window.addEventListener('load', function() {
+        if (window.location.hash) {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          const hashQuery = hashParams.get('q');
+          if (hashQuery) {
+            searchInput.value = decodeURIComponent(hashQuery);
+          }
+        }
+      });
+    }
   </script>
 </body>
 
