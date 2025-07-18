@@ -1,68 +1,68 @@
 html,
 input {
-  font-family: "Tex Gyre Heros", "Nimbus Sans L", Helvetica, Arial, sans-serif;
+	font-family: "Tex Gyre Heros", "Nimbus Sans L", Helvetica, Arial, sans-serif;
 }
 
 html {
-  font-size: 100%;
-  background: white;
-  height: 100%;
-  margin: 0;
+	font-size: 100%;
+	background: white;
+	height: 100%;
+	margin: 0;
 }
 
 h1 {
-  font-weight: bold;
-  font-size: 320%;
-  color: #2d4f8e;
-  text-align: center;
+	font-weight: bold;
+	font-size: 320%;
+	color: #2d4f8e;
+	text-align: center;
 }
 
 body {
-  position: relative;
-  top: 25%;
+	position: relative;
+	top: 25%;
 }
 
 form {
-  max-width: 50em;
-  margin: auto;
-  display: flex;
+	max-width: 50em;
+	margin: auto;
+	display: flex;
 }
 
 input {
-  border-radius: 0.2em;
-  padding: 0.3em 0.2em 0.05em;
-  font-size: 160%;
+	border-radius: 0.2em;
+	padding: 0.3em 0.2em 0.05em;
+	font-size: 160%;
 }
 
 input[type="text"] {
-  border: thick solid #de5833;
-  outline-color: #de5833;
-  background-color: white;
-  color: black;
-  text-align: left;
-  flex: auto;
-  width: 100%;
+	border: thick solid #de5833;
+	outline-color: #de5833;
+	background-color: white;
+	color: black;
+	text-align: left;
+	flex: auto;
+	width: 100%;
 }
 
 input[type="submit"] {
-  border: thick solid #64bb45;
-  outline-color: #64bb45;
-  background-color: #64bb45;
-  color: white;
-  cursor: pointer;
-  flex: none;
-  margin-left: 0.2em;
+	border: thick solid #64bb45;
+	outline-color: #64bb45;
+	background-color: #64bb45;
+	color: white;
+	cursor: pointer;
+	flex: none;
+	margin-left: 0.2em;
 }
 
 @media (prefers-color-scheme: dark) {
-  html,
-  input[type="text"] {
-    background-color: #2d4f8e;
-  }
+	html,
+	input[type="text"] {
+		background-color: #2d4f8e;
+	}
 
-  html,
-  h1,
-  input[type="text"] {
-    color: white;
-  }
+	html,
+	h1,
+	input[type="text"] {
+		color: white;
+	}
 }

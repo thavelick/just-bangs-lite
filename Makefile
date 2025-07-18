@@ -11,9 +11,17 @@ dev: # Start development server
 	@echo "Starting development server.."
 	cd public_html && python -m http.server 8000
 
-format: # Format code with prettier
+format: # Format code with Biome
 	@echo "Formatting code.."
-	npx prettier --write --check .
+	npx @biomejs/biome format --write .
+
+lint: # Lint code with Biome
+	@echo "Linting code.."
+	npx @biomejs/biome lint .
+
+check: # Check formatting and linting with Biome
+	@echo "Checking formatting and linting.."
+	npx @biomejs/biome check .
 
 # -----------------------------------------------------------
 # CAUTION: If you have a file with the same name as make

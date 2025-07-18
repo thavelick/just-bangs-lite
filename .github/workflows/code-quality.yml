@@ -1,4 +1,4 @@
-name: Format Check
+name: Code Quality
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  format-check:
+  code-quality:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,5 +18,5 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Check code formatting
-        run: npx prettier --check .
+      - name: Check code formatting and linting
+        run: npx @biomejs/biome check .
