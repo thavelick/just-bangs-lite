@@ -55,7 +55,6 @@ input[type="submit"] {
 }
 
 @media (prefers-color-scheme: dark) {
-
   html,
   input[type="text"] {
     background-color: #2d4f8e;

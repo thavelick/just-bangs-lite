@@ -13,6 +13,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 ## Usage
 
 ### Basic Search
+
 - `just bangs gh!` → Search GitHub for "just bangs"
 - `!gh just bangs` → Also works with bang at the start
 - `python w!` → Search Wikipedia for "python"
@@ -21,6 +22,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 ### Supported Bangs
 
 **Common:**
+
 - `g!` → Google
 - `ddg!` → DuckDuckGo
 - `d!` → DuckDuckGo Lite (default fallback)
@@ -30,6 +32,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - `pypi!` → PyPI
 
 **Specialized:**
+
 - `al!` → Arch Linux docs
 - `cl!` → Craigslist
 - `e!` → eBay
@@ -46,16 +49,20 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 ## Installation
 
 ### Local Usage
+
 1. Download `index.html`
 2. Open in your browser or serve from any web server
 3. Start searching!
 
 ### Browser Search Engine
+
 Add as a custom search engine in your browser:
+
 - **URL**: `https://your-domain.com/path/to/index.html?q=%s`
 - **Local**: `file:///path/to/index.html?q=%s`
 
 ### Web Server
+
 Place `index.html` in any directory on your web server. Works great as a subdirectory install.
 
 ## Development
