@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Just Bangs!</title>
+  <style>
+    html,
+    input {
+      font-family: "Tex Gyre Heros", "Nimbus Sans L", Helvetica, Arial, sans-serif;
+    }
+
+    html {
+      font-size: 100%;
+      background: white;
+      height: 100%;
+      margin: 0;
+    }
+
+    h1 {
+      font-weight: bold;
+      font-size: 320%;
+      color: #2d4f8e;
+      text-align: center;
+    }
+
+    body {
+      position: relative;
+      top: 25%;
+    }
+
+    form {
+      max-width: 50em;
+      margin: auto;
+      display: flex;
+    }
+
+    input {
+      border-radius: 0.2em;
+      padding: 0.3em 0.2em 0.05em;
+      font-size: 160%;
+    }
+
+    input[type="text"] {
+      border: thick solid #de5833;
+      outline-color: #de5833;
+      background-color: white;
+      color: black;
+      text-align: left;
+      flex: auto;
+      width: 100%;
+    }
+
+    input[type="submit"] {
+      border: thick solid #64bb45;
+      outline-color: #64bb45;
+      background-color: #64bb45;
+      color: white;
+      cursor: pointer;
+      flex: none;
+      margin-left: 0.2em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+
+      html,
+      input[type="text"] {
+        background-color: #2d4f8e;
+      }
+
+      html,
+      h1,
+      input[type="text"] {
+        color: white;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Just Bangs!</h1>
+  <form id="searchForm">
+    <input type="text" id="searchInput" name="q" autocomplete="off" value="" autofocus="" placeholder="Enter search query with !bang" />
+    <input type="button" id="searchButton" value="Search" />
+  </form>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    
+    const bangs = [
+      // Custom bangs from home-server
+      {
+        "t": "al",
+        "u": "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}"
+      },
+      {
+        "t": "cl",
+        "u": "https://denver.craigslist.org/search/?query={{{s}}}"
+      },
+      {
+        "t": "d",
+        "u": "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en"
+      },
+      {
+        "t": "e",
+        "u": "https://www.ebay.com/sch/i.html?_nkw={{{s}}}&rt=nc&LH_ItemCondition=4"
+      },
+      {
+        "t": "jw",
+        "u": "https://www.justwatch.com/us/search?q={{{s}}}"
+      },
+      {
+        "t": "k",
+        "u": "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}"
+      },
+      {
+        "t": "lg",
+        "u": "http://libgen.is/search.php?req={{{s}}}"
+      },
+      {
+        "t": "lgf",
+        "u": "http://libgen.is/fiction/?q={{{s}}}"
+      },
+      {
+        "t": "m",
+        "u": "https://search.marginalia.nu/search?query={{{s}}}"
+      },
+      {
+        "t": "pw",
+        "u": "http://bernard:9696/search?query={{{s}}}&type=search"
+      },
+      {
+        "t": "py",
+        "u": "https://kiwix.tristanhavelick.com/search?content=python-3.10.2&pattern={{{s}}}"
+      },
+      {
+        "t": "sg",
+        "u": "https://app.thestorygraph.com/browse?search_term={{{s}}}"
+      },
+      {
+        "t": "ytt",
+        "u": "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}"
+      },
+      {
+        "t": "x",
+        "u": "https://searxng.tristanhavelick.com/search?q={{{s}}}"
+      },
+      // Common bangs
+      {
+        "t": "gh",
+        "u": "https://github.com/search?q={{{s}}}"
+      },
+      {
+        "t": "g",
+        "u": "https://www.google.com/search?q={{{s}}}"
+      },
+      {
+        "t": "ddg",
+        "u": "https://duckduckgo.com/?q={{{s}}}"
+      },
+      {
+        "t": "a",
+        "u": "https://www.amazon.com/s?k={{{s}}}"
+      },
+      {
+        "t": "pypi",
+        "u": "https://pypi.org/search/?q={{{s}}}"
+      },
+      {
+        "t": "w",
+        "u": "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}"
+      }
+    ];
+
+    function processBang(query) {
+      const trimmed = query.trim();
+      
+      // Check if query starts with !
+      if (trimmed.startsWith('!')) {
+        const spaceIndex = trimmed.indexOf(' ');
+        if (spaceIndex === -1) {
+          // No search term, just bang
+          return null;
+        }
+        
+        const bangTag = trimmed.substring(1, spaceIndex);
+        const searchTerm = trimmed.substring(spaceIndex + 1).trim();
+        
+        // Find matching bang
+        const bang = bangs.find(b => b.t === bangTag);
+        if (bang) {
+          return bang.u.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+        }
+      }
+      
+      // Check if query ends with !bang (like "minijinja gh!")
+      const bangMatch = trimmed.match(/^(.+)\s+(\w+)!$/);
+      if (bangMatch) {
+        const searchTerm = bangMatch[1].trim();
+        const bangTag = bangMatch[2];
+        
+        // Find matching bang
+        const bang = bangs.find(b => b.t === bangTag);
+        if (bang) {
+          return bang.u.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+        }
+      }
+      
+      // No bang found, default to DuckDuckGo Lite
+      return `https://lite.duckduckgo.com/lite?q=${encodeURIComponent(trimmed)}&kl=us-en`;
+    }
+
+    function performSearch() {
+      const query = searchInput.value;
+      const url = processBang(query);
+      if (url) {
+        // Save the search query to the URL hash so it persists when user hits back
+        window.location.hash = '#q=' + encodeURIComponent(query);
+        window.location.href = url;
+      }
+    }
+
+    document.getElementById('searchButton').addEventListener('click', performSearch);
+
+    // Allow Enter key to search
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        performSearch();
+      }
+    });
+
+    // Handle query string and hash parameters on page load
+    window.addEventListener('load', function() {
+      // Check for query string first (for browser search engine integration)
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryParam = urlParams.get('q');
+      
+      if (queryParam) {
+        // If there's a query parameter, perform the search immediately
+        searchInput.value = queryParam;
+        performSearch();
+      } else if (window.location.hash) {
+        // Otherwise, check for hash parameters (for back button support)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const hashQuery = hashParams.get('q');
+        if (hashQuery) {
+          searchInput.value = decodeURIComponent(hashQuery);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
