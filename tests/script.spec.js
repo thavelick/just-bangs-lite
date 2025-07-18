@@ -3,16 +3,16 @@ const { getQueryParam } = require("../public_html/script.js");
 describe("getQueryParam", () => {
   // Mock window.location.search for testing
   const originalLocation = global.window?.location;
-  
+
   beforeEach(() => {
     delete global.window;
     global.window = {
       location: {
-        search: ""
-      }
+        search: "",
+      },
     };
   });
-  
+
   afterEach(() => {
     global.window = originalLocation;
   });
