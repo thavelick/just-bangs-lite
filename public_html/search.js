@@ -154,10 +154,10 @@ function setupUI(windowObj = window) {
 
 function initialize(windowObj = window) {
   const queryParam = getQueryParam("q", windowObj);
-  if (queryParam) {
+  if (queryParam !== null) {
     const url = processBang(queryParam);
     if (url) {
-      redirect(url);
+      redirect(url, windowObj);
     }
   } else {
     windowObj.document.addEventListener("DOMContentLoaded", () =>

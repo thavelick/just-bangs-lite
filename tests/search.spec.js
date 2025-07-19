@@ -3,6 +3,7 @@ const {
   processBang,
   performSearch,
   setupUI,
+  initialize,
 } = require("../public_html/search.js");
 
 describe("getQueryParam", () => {
@@ -34,6 +35,11 @@ describe("getQueryParam", () => {
   test("handles empty search string", () => {
     global.window.location.search = "";
     expect(getQueryParam("q")).toBeNull();
+  });
+
+  test("returns empty string for empty query parameter", () => {
+    global.window.location.search = "?q=";
+    expect(getQueryParam("q")).toBe("");
   });
 });
 
@@ -169,5 +175,70 @@ describe("setupUI", () => {
     setupUI(mockWindow);
 
     expect(mockSearchInput.value).toBe("");
+  });
+});
+
+describe("initialize", () => {
+  let mockWindow;
+  let mockDocument;
+
+  beforeEach(() => {
+    mockDocument = {
+      addEventListener: jest.fn(),
+    };
+
+    mockWindow = {
+      document: mockDocument,
+      location: {
+        search: "",
+        href: "",
+        hash: "",
+      },
+    };
+  });
+
+  test("redirects immediately when query parameter exists", () => {
+    mockWindow.location.search = "?q=test+search";
+
+    initialize(mockWindow);
+
+    expect(mockWindow.location.href).toBe(
+      "https://lite.duckduckgo.com/lite?q=test%20search&kl=us-en",
+    );
+    expect(mockDocument.addEventListener).not.toHaveBeenCalled();
+  });
+
+  test("redirects for bang query parameter", () => {
+    mockWindow.location.search = "?q=!g+javascript";
+
+    initialize(mockWindow);
+
+    expect(mockWindow.location.href).toBe(
+      "https://www.google.com/search?q=javascript",
+    );
+    expect(mockDocument.addEventListener).not.toHaveBeenCalled();
+  });
+
+  test("sets up DOMContentLoaded listener when no query parameter", () => {
+    mockWindow.location.search = "";
+
+    initialize(mockWindow);
+
+    expect(mockWindow.location.href).toBe("");
+    expect(mockDocument.addEventListener).toHaveBeenCalledWith(
+      "DOMContentLoaded",
+      expect.any(Function),
+    );
+  });
+
+  test("redirects when query parameter is empty string", () => {
+    mockWindow.location.search = "?q=";
+
+    initialize(mockWindow);
+
+    expect(mockWindow.location.href).toBe(
+      "https://lite.duckduckgo.com/lite?q=&kl=us-en",
+    );
+    expect(mockDocument.addEventListener).not.toHaveBeenCalled();
   });
 });
