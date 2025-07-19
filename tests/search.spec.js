@@ -1,4 +1,4 @@
-const { getQueryParam } = require("../public_html/script.js");
+const { getQueryParam } = require("../public_html/search.js");
 
 describe("getQueryParam", () => {
   // Mock window.location.search for testing

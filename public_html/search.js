@@ -107,8 +107,8 @@ function processBang(query) {
   return `https://lite.duckduckgo.com/lite?q=${encodeURIComponent(trimmed)}&kl=us-en`;
 }
 
-function getQueryParam(key) {
-  const urlParams = new URLSearchParams(window.location.search);
+function getQueryParam(key, windowObj = window) {
+  const urlParams = new URLSearchParams(windowObj.location.search);
   return urlParams.get(key);
 }
 
@@ -116,14 +116,15 @@ function redirect(url) {
   window.location.href = url;
 }
 
-function setupUI() {
+function setupUI(windowObj = window) {
+  const document = windowObj.document;
   const searchInput = document.getElementById("searchInput");
 
   function performSearch() {
     const query = searchInput.value;
     const url = processBang(query);
     if (url) {
-      window.location.hash = `#q=${encodeURIComponent(query)}`;
+      windowObj.location.hash = `#q=${encodeURIComponent(query)}`;
       redirect(url);
     }
   }
@@ -139,8 +140,10 @@ function setupUI() {
     }
   });
 
-  if (window.location.hash) {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+  if (windowObj.location.hash) {
+    const hashParams = new URLSearchParams(
+      windowObj.location.hash.substring(1),
+    );
     const hashQuery = hashParams.get("q");
     if (hashQuery) {
       searchInput.value = decodeURIComponent(hashQuery);
@@ -148,15 +151,17 @@ function setupUI() {
   }
 }
 
-function initialize() {
-  const queryParam = getQueryParam("q");
+function initialize(windowObj = window) {
+  const queryParam = getQueryParam("q", windowObj);
   if (queryParam) {
     const url = processBang(queryParam);
     if (url) {
       redirect(url);
     }
   } else {
-    document.addEventListener("DOMContentLoaded", setupUI);
+    windowObj.document.addEventListener("DOMContentLoaded", () =>
+      setupUI(windowObj),
+    );
   }
 }
 
@@ -170,5 +175,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     getQueryParam,
     processBang,
+    setupUI,
+    initialize,
   };
 }
