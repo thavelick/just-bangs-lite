@@ -1,3 +1,6 @@
+const FALLBACK_SEARCH_URL =
+  "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en";
+
 const bangs = [
   {
     t: "al",
@@ -69,13 +72,17 @@ const bangs = [
   },
 ];
 
+function buildSearchUrl(urlTemplate, searchTerm) {
+  return urlTemplate.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+}
+
 function processBang(query) {
   const trimmed = query.trim();
 
   if (trimmed.startsWith("!")) {
     const spaceIndex = trimmed.indexOf(" ");
     if (spaceIndex === -1) {
-      return null;
+      return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed);
     }
 
     const bangTag = trimmed.substring(1, spaceIndex);
@@ -83,7 +90,7 @@ function processBang(query) {
 
     const bang = bangs.find((b) => b.t === bangTag);
     if (bang) {
-      return bang.u.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+      return buildSearchUrl(bang.u, searchTerm);
     }
   }
   const bangMatch = trimmed.match(/^(.+)\s+(\w+)!$/);
@@ -93,10 +100,10 @@ function processBang(query) {
 
     const bang = bangs.find((b) => b.t === bangTag);
     if (bang) {
-      return bang.u.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+      return buildSearchUrl(bang.u, searchTerm);
     }
   }
-  return `https://lite.duckduckgo.com/lite?q=${encodeURIComponent(trimmed)}&kl=us-en`;
+  return FALLBACK_SEARCH_URL.replace(/{{{s}}}/g, encodeURIComponent(trimmed));
 }
 
 function getQueryParam(key, windowObj = window) {
@@ -165,5 +172,6 @@ if (typeof module !== "undefined" && module.exports) {
     performSearch,
     setupUI,
     initialize,
+    buildSearchUrl,
   };
 }

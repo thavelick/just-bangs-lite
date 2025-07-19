@@ -4,7 +4,16 @@ const {
   performSearch,
   setupUI,
   initialize,
+  buildSearchUrl,
 } = require("../public_html/search.js");
+
+describe("buildSearchUrl", () => {
+  test("replaces template placeholder with encoded search term", () => {
+    const template = "https://example.com/search?q={{{s}}}";
+    const result = buildSearchUrl(template, "hello world");
+    expect(result).toBe("https://example.com/search?q=hello%20world");
+  });
+});
 
 describe("getQueryParam", () => {
   const originalLocation = global.window?.location;
@@ -75,6 +84,11 @@ describe("processBang", () => {
     expect(result).toBe(
       "https://lite.duckduckgo.com/lite?q=!unknown%20search%20term&kl=us-en",
     );
+  });
+
+  test("falls back to DuckDuckGo for bang without search term", () => {
+    const result = processBang("!gh");
+    expect(result).toBe("https://lite.duckduckgo.com/lite?q=!gh&kl=us-en");
   });
 });
 
