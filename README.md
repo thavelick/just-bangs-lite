@@ -38,8 +38,6 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - `e!` → eBay
 - `jw!` → JustWatch
 - `k!` → Kiwix
-- `lg!` → Library Genesis
-- `lgf!` → Library Genesis Fiction
 - `m!` → Marginalia Search
 - `py!` → Python docs
 - `sg!` → StoryGraph

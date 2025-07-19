@@ -24,14 +24,6 @@ const bangs = [
     u: "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}",
   },
   {
-    t: "lg",
-    u: "http://libgen.is/search.php?req={{{s}}}",
-  },
-  {
-    t: "lgf",
-    u: "http://libgen.is/fiction/?q={{{s}}}",
-  },
-  {
     t: "m",
     u: "https://search.marginalia.nu/search?query={{{s}}}",
   },
