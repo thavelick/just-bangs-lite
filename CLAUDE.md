@@ -92,3 +92,8 @@ const mockWindow = {
 - `performSearch`: Hash setting and redirection
 - `setupUI`: Event listener setup and hash population
 - `initialize`: Query param detection and app initialization
+
+## Development Best Practices
+
+### CSS Guidelines
+- Always put styles in style.css, never inline
