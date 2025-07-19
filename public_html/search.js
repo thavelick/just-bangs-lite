@@ -112,31 +112,32 @@ function getQueryParam(key, windowObj = window) {
   return urlParams.get(key);
 }
 
-function redirect(url) {
-  window.location.href = url;
+function redirect(url, windowObj = window) {
+  windowObj.location.href = url;
+}
+
+function performSearch(query, windowObj = window) {
+  const url = processBang(query);
+  if (url) {
+    windowObj.location.hash = `#q=${encodeURIComponent(query)}`;
+    redirect(url, windowObj);
+  }
 }
 
 function setupUI(windowObj = window) {
   const document = windowObj.document;
   const searchInput = document.getElementById("searchInput");
 
-  function performSearch() {
-    const query = searchInput.value;
-    const url = processBang(query);
-    if (url) {
-      windowObj.location.hash = `#q=${encodeURIComponent(query)}`;
-      redirect(url);
-    }
-  }
-
   document
     .getElementById("searchButton")
-    .addEventListener("click", performSearch);
+    .addEventListener("click", () =>
+      performSearch(searchInput.value, windowObj),
+    );
 
   searchInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      performSearch();
+      performSearch(searchInput.value, windowObj);
     }
   });
 
@@ -169,6 +170,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     getQueryParam,
     processBang,
+    performSearch,
     setupUI,
     initialize,
   };
