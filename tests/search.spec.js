@@ -1,7 +1,6 @@
 const { getQueryParam } = require("../public_html/search.js");
 
 describe("getQueryParam", () => {
-  // Mock window.location.search for testing
   const originalLocation = global.window?.location;
 
   beforeEach(() => {

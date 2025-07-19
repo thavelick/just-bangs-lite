@@ -165,12 +165,6 @@ function initialize(windowObj = window) {
   }
 }
 
-// Only initialize in browser environment
-if (typeof window !== "undefined") {
-  initialize();
-}
-
-// Export functions for testing (Node.js environment)
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     getQueryParam,
