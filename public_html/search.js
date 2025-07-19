@@ -1,76 +1,25 @@
 const FALLBACK_SEARCH_URL =
   "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en";
 
-const bangs = [
-  {
-    t: "al",
-    u: "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}",
-  },
-  {
-    t: "cl",
-    u: "https://denver.craigslist.org/search/?query={{{s}}}",
-  },
-  {
-    t: "d",
-    u: "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en",
-  },
-  {
-    t: "e",
-    u: "https://www.ebay.com/sch/i.html?_nkw={{{s}}}&rt=nc&LH_ItemCondition=4",
-  },
-  {
-    t: "jw",
-    u: "https://www.justwatch.com/us/search?q={{{s}}}",
-  },
-  {
-    t: "k",
-    u: "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}",
-  },
-  {
-    t: "m",
-    u: "https://search.marginalia.nu/search?query={{{s}}}",
-  },
-  {
-    t: "py",
-    u: "https://kiwix.tristanhavelick.com/search?content=python-3.10.2&pattern={{{s}}}",
-  },
-  {
-    t: "sg",
-    u: "https://app.thestorygraph.com/browse?search_term={{{s}}}",
-  },
-  {
-    t: "ytt",
-    u: "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}",
-  },
-  {
-    t: "x",
-    u: "https://searxng.tristanhavelick.com/search?q={{{s}}}",
-  },
-  {
-    t: "gh",
-    u: "https://github.com/search?q={{{s}}}",
-  },
-  {
-    t: "g",
-    u: "https://www.google.com/search?q={{{s}}}",
-  },
-  {
-    t: "ddg",
-    u: "https://duckduckgo.com/?q={{{s}}}",
-  },
-  {
-    t: "a",
-    u: "https://www.amazon.com/s?k={{{s}}}",
-  },
-  {
-    t: "pypi",
-    u: "https://pypi.org/search/?q={{{s}}}",
-  },
-  {
-    t: "w",
-    u: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
-  },
-];
+const bangs = {
+  al: "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}",
+  cl: "https://denver.craigslist.org/search/?query={{{s}}}",
+  d: "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en",
+  e: "https://www.ebay.com/sch/i.html?_nkw={{{s}}}&rt=nc&LH_ItemCondition=4",
+  jw: "https://www.justwatch.com/us/search?q={{{s}}}",
+  k: "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}",
+  m: "https://search.marginalia.nu/search?query={{{s}}}",
+  py: "https://kiwix.tristanhavelick.com/search?content=python-3.10.2&pattern={{{s}}}",
+  sg: "https://app.thestorygraph.com/browse?search_term={{{s}}}",
+  ytt: "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}",
+  x: "https://searxng.tristanhavelick.com/search?q={{{s}}}",
+  gh: "https://github.com/search?q={{{s}}}",
+  g: "https://www.google.com/search?q={{{s}}}",
+  ddg: "https://duckduckgo.com/?q={{{s}}}",
+  a: "https://www.amazon.com/s?k={{{s}}}",
+  pypi: "https://pypi.org/search/?q={{{s}}}",
+  w: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
+};
 
 function buildSearchUrl(urlTemplate, searchTerm) {
   return urlTemplate.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
@@ -88,9 +37,9 @@ function processBang(query) {
     const bangTag = trimmed.substring(1, spaceIndex);
     const searchTerm = trimmed.substring(spaceIndex + 1).trim();
 
-    const bang = bangs.find((b) => b.t === bangTag);
-    if (bang) {
-      return buildSearchUrl(bang.u, searchTerm);
+    const bangUrl = bangs[bangTag];
+    if (bangUrl) {
+      return buildSearchUrl(bangUrl, searchTerm);
     }
   }
   const bangMatch = trimmed.match(/^(.+)\s+(\w+)!$/);
@@ -98,12 +47,12 @@ function processBang(query) {
     const searchTerm = bangMatch[1].trim();
     const bangTag = bangMatch[2];
 
-    const bang = bangs.find((b) => b.t === bangTag);
-    if (bang) {
-      return buildSearchUrl(bang.u, searchTerm);
+    const bangUrl = bangs[bangTag];
+    if (bangUrl) {
+      return buildSearchUrl(bangUrl, searchTerm);
     }
   }
-  return FALLBACK_SEARCH_URL.replace(/{{{s}}}/g, encodeURIComponent(trimmed));
+  return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed);
 }
 
 function getQueryParam(key, windowObj = window) {

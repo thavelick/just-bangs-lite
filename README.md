@@ -65,7 +65,33 @@ Place `index.html` in any directory on your web server. Works great as a subdire
 
 ## Development
 
-The entire application is contained in a single HTML file with embedded CSS and JavaScript. No build process or dependencies required.
+### Configuration
+
+To add or modify search bangs, edit the `bangs` object in `public_html/search.js`:
+
+```javascript
+const bangs = {
+  trigger: "https://example.com/search?q={{{s}}}",
+  gh: "https://github.com/search?q={{{s}}}",
+  // ... more bangs
+};
+```
+
+- **Key**: Bang trigger (use only lowercase a-z characters)
+- **Value**: Search URL template with `{{{s}}}` placeholder for the search term
+- The `{{{s}}}` placeholder gets replaced with the URL-encoded search query
+
+### Build Commands
+
+```bash
+make dev     # Start development server on port 8000
+make test    # Run unit tests
+make format  # Auto-format code
+make lint    # Check code style
+make check   # Run formatting and linting checks
+```
+
+No build process or external dependencies required for the core application.
 
 ## License
 
