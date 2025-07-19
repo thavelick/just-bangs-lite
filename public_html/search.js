@@ -75,12 +75,13 @@ function performSearch(query, windowObj = window) {
 function setupUI(windowObj = window) {
   const document = windowObj.document;
   const searchInput = document.getElementById("searchInput");
+  const searchButton = document.getElementById("searchButton");
 
-  document
-    .getElementById("searchButton")
-    .addEventListener("click", () =>
-      performSearch(searchInput.value, windowObj),
-    );
+  if (!searchInput || !searchButton) return;
+
+  searchButton.addEventListener("click", () =>
+    performSearch(searchInput.value, windowObj),
+  );
 
   searchInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
