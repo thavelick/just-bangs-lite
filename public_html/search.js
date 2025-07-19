@@ -28,6 +28,10 @@ function buildSearchUrl(urlTemplate, searchTerm) {
 function processBang(query) {
   const trimmed = query.trim();
 
+  if (trimmed.length > 2000) {
+    return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed.substring(0, 2000));
+  }
+
   if (trimmed.startsWith("!")) {
     const spaceIndex = trimmed.indexOf(" ");
     if (spaceIndex === -1) {

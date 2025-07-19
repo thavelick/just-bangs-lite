@@ -90,6 +90,16 @@ describe("processBang", () => {
     const result = processBang("!gh");
     expect(result).toBe("https://lite.duckduckgo.com/lite?q=!gh&kl=us-en");
   });
+
+  test("truncates extremely long queries to 2000 characters", () => {
+    const longQuery = "a".repeat(2500);
+    const result = processBang(longQuery);
+    const expected =
+      "https://lite.duckduckgo.com/lite?q=" +
+      encodeURIComponent("a".repeat(2000)) +
+      "&kl=us-en";
+    expect(result).toBe(expected);
+  });
 });
 
 describe("performSearch", () => {
