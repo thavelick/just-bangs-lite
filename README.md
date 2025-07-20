@@ -26,7 +26,8 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - `g!` → Google
 - `ddg!` → DuckDuckGo
 - `d!` → DuckDuckGo Lite (default fallback)
-- `gh!` → GitHub
+- `gh!` → GitHub (search)
+- `ghr!` → GitHub (direct repo/user URLs)
 - `w!` → Wikipedia
 - `a!` → Amazon
 - `pypi!` → PyPI
@@ -41,6 +42,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - `m!` → Marginalia Search
 - `py!` → Python docs
 - `sg!` → StoryGraph
+- `wb!` → Wayback Machine
 - `ytt!` → YouTube Transcript
 - `x!` → SearXNG
 

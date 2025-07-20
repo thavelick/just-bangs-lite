@@ -13,6 +13,12 @@ describe("buildSearchUrl", () => {
     const result = buildSearchUrl(template, "hello world");
     expect(result).toBe("https://example.com/search?q=hello%20world");
   });
+
+  test("preserves slashes for path-based URLs", () => {
+    const template = "https://example.com/{{{s}}}";
+    const result = buildSearchUrl(template, "path/to/resource");
+    expect(result).toBe("https://example.com/path/to/resource");
+  });
 });
 
 describe("getQueryParam", () => {

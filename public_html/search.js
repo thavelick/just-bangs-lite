@@ -14,6 +14,8 @@ const bangs = {
   ytt: "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}",
   x: "https://searxng.tristanhavelick.com/search?q={{{s}}}",
   gh: "https://github.com/search?q={{{s}}}",
+  ghr: "https://github.com/{{{s}}}",
+  wb: "https://web.archive.org/web/{{{s}}}",
   g: "https://www.google.com/search?q={{{s}}}",
   ddg: "https://duckduckgo.com/?q={{{s}}}",
   a: "https://www.amazon.com/s?k={{{s}}}",
@@ -22,7 +24,10 @@ const bangs = {
 };
 
 function buildSearchUrl(urlTemplate, searchTerm) {
-  return urlTemplate.replace(/{{{s}}}/g, encodeURIComponent(searchTerm));
+  const encoded = encodeURIComponent(searchTerm);
+  // Preserve slashes for URLs that need path segments
+  const fixed = encoded.replace(/%2F/g, "/");
+  return urlTemplate.replace(/{{{s}}}/g, fixed);
 }
 
 function processBang(query) {
