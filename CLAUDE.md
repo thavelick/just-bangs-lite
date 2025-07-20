@@ -31,7 +31,7 @@ The `= window` default parameter makes the real browser object the default, allo
 
 ### Essential Commands
 ```bash
-make dev        # Start Python HTTP server on port 8000
+make dev        # Starts Python HTTP server on port 8000. Don't run this. Ask me if you think it needs to be started
 make test       # Run Jest unit tests
 make format     # Auto-format code with Biome
 make lint       # Check linting with Biome
@@ -86,12 +86,24 @@ const mockWindow = {
 };
 ```
 
-### Current Test Coverage
-- `getQueryParam`: URL parameter parsing
-- `processBang`: Bang syntax processing and fallbacks
-- `performSearch`: Hash setting and redirection
-- `setupUI`: Event listener setup and hash population
-- `initialize`: Query param detection and app initialization
+## Development Workflow
+
+### Git Workflow
+- Write meaningful commit messages based on conversation context (focus on "why" not just "what")
+- Always work on new branches, not main
+- Include ticket numbers in commits and PRs when working on tickets
+- When user says "Review time":
+  a. Make sure we're not on main branch
+  b. Commit what we've done
+  c. Push to remote
+  d. Create a PR with `gh`
+
+### Pre-Commit Checklist
+Before any commit:
+1. Run `make check` to verify code style and linting
+2. Run `make test` to ensure all tests pass
+3. Verify the application still works with `make dev`
+4. Write a descriptive commit message based on our conversation
 
 ## Development Best Practices
 
