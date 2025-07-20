@@ -110,6 +110,18 @@ function setupUI(windowObj = window) {
   }
 }
 
+function toggleDarkMode() {
+  const html = document.documentElement;
+
+  if (html.classList.contains("dark-mode")) {
+    html.classList.remove("dark-mode");
+    html.classList.add("light-mode");
+  } else {
+    html.classList.remove("light-mode");
+    html.classList.add("dark-mode");
+  }
+}
+
 function initialize(windowObj = window) {
   const queryParam = getQueryParam("q", windowObj);
   if (queryParam !== null) {
@@ -118,9 +130,23 @@ function initialize(windowObj = window) {
       redirect(url, windowObj);
     }
   } else {
-    windowObj.document.addEventListener("DOMContentLoaded", () =>
-      setupUI(windowObj),
-    );
+    windowObj.document.addEventListener("DOMContentLoaded", () => {
+      setupUI(windowObj);
+      initializeDarkModeToggle(windowObj);
+    });
+  }
+}
+
+function initializeDarkModeToggle(windowObj = window) {
+  const html = windowObj.document.documentElement;
+  const prefersDark = windowObj.matchMedia(
+    "(prefers-color-scheme: dark)",
+  ).matches;
+
+  if (prefersDark) {
+    html.classList.add("dark-mode");
+  } else {
+    html.classList.add("light-mode");
   }
 }
 
@@ -132,5 +158,7 @@ if (typeof module !== "undefined" && module.exports) {
     setupUI,
     initialize,
     buildSearchUrl,
+    toggleDarkMode,
+    initializeDarkModeToggle,
   };
 }

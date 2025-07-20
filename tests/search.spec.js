@@ -5,6 +5,8 @@ const {
   setupUI,
   initialize,
   buildSearchUrl,
+  toggleDarkMode,
+  initializeDarkModeToggle,
 } = require("../public_html/search.js");
 
 describe("buildSearchUrl", () => {
@@ -270,5 +272,100 @@ describe("initialize", () => {
       "https://lite.duckduckgo.com/lite?q=&kl=us-en",
     );
     expect(mockDocument.addEventListener).not.toHaveBeenCalled();
+  });
+});
+
+describe("toggleDarkMode", () => {
+  let mockHTML;
+
+  beforeEach(() => {
+    mockHTML = {
+      classList: {
+        contains: jest.fn(),
+        remove: jest.fn(),
+        add: jest.fn(),
+      },
+    };
+
+    global.document = {
+      documentElement: mockHTML,
+    };
+  });
+
+  afterEach(() => {
+    delete global.document;
+  });
+
+  test("switches from dark-mode to light-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(true);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("dark-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("light-mode");
+  });
+
+  test("switches from light-mode to dark-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
+  });
+
+  test("switches from no class to dark-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
+  });
+});
+
+describe("initializeDarkModeToggle", () => {
+  let mockHTML;
+  let mockWindow;
+
+  beforeEach(() => {
+    mockHTML = {
+      classList: {
+        add: jest.fn(),
+      },
+    };
+
+    mockWindow = {
+      document: {
+        documentElement: mockHTML,
+      },
+      matchMedia: jest.fn(),
+    };
+  });
+
+  test("adds dark-mode class when system prefers dark", () => {
+    mockWindow.matchMedia.mockReturnValue({ matches: true });
+
+    initializeDarkModeToggle(mockWindow);
+
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
+  });
+
+  test("adds light-mode class when system prefers light", () => {
+    mockWindow.matchMedia.mockReturnValue({ matches: false });
+
+    initializeDarkModeToggle(mockWindow);
+
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("light-mode");
+  });
+
+  test("calls matchMedia with correct query", () => {
+    mockWindow.matchMedia.mockReturnValue({ matches: false });
+
+    initializeDarkModeToggle(mockWindow);
+
+    expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+      "(prefers-color-scheme: dark)",
+    );
   });
 });
