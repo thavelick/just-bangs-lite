@@ -145,6 +145,7 @@ function initialize(windowObj = window) {
       setupUI(windowObj);
       initializeDarkModeToggle(windowObj);
       initializePWA(windowObj);
+      initializeSettings(windowObj);
     });
   }
 }
@@ -192,6 +193,102 @@ function initializePWA(windowObj = window) {
   }
 }
 
+function toggleSettingsPanel(windowObj = window) {
+  const panel = windowObj.document.querySelector(".settings-panel");
+  if (!panel) return;
+
+  const isHidden = panel.getAttribute("aria-hidden") === "true";
+  panel.setAttribute("aria-hidden", isHidden ? "false" : "true");
+}
+
+function buildSettingsPanel(windowObj = window) {
+  const currentDefault = getDefaultBang(windowObj);
+
+  let html = `
+    <div class="settings-header">
+      <h2>
+        Settings
+        <button class="close-button" type="button" aria-label="Close settings">×</button>
+      </h2>
+      <p class="save-message" id="save-message">✓ Changes saved automatically</p>
+    </div>
+    <div class="settings-body">
+      <h3>Default Search Engine</h3>
+      <div class="bang-list">
+  `;
+
+  for (const [bangKey, bangUrl] of Object.entries(bangs)) {
+    const isChecked = bangKey === currentDefault ? " checked" : "";
+    html += `
+      <div class="bang-trigger">${bangKey}!</div>
+      <div class="bang-url">${bangUrl}</div>
+      <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isChecked}>
+    `;
+  }
+
+  html += `
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+function handleDefaultBangChange(event, windowObj = window) {
+  if (event.target.name === "default-bang") {
+    const storage = windowObj.localStorage;
+    if (storage) {
+      storage.setItem("default-bang", event.target.value);
+      showSaveMessage(windowObj);
+    }
+  }
+}
+
+function showSaveMessage(windowObj = window) {
+  const saveMessage = windowObj.document.getElementById("save-message");
+  if (saveMessage) {
+    saveMessage.classList.add("visible");
+    setTimeout(() => {
+      saveMessage.classList.remove("visible");
+    }, 2000);
+  }
+}
+
+function setupSettingsEventListeners(windowObj = window) {
+  const hamburgerButton = windowObj.document.querySelector(".hamburger-menu");
+  const settingsPanel = windowObj.document.querySelector(".settings-panel");
+
+  if (hamburgerButton) {
+    hamburgerButton.addEventListener("click", () =>
+      toggleSettingsPanel(windowObj),
+    );
+  }
+
+  if (settingsPanel) {
+    settingsPanel.addEventListener("click", (event) => {
+      // Close on backdrop click
+      if (event.target === settingsPanel) {
+        toggleSettingsPanel(windowObj);
+      }
+      // Close on close button click
+      if (event.target.classList.contains("close-button")) {
+        toggleSettingsPanel(windowObj);
+      }
+    });
+
+    settingsPanel.addEventListener("change", (event) => {
+      handleDefaultBangChange(event, windowObj);
+    });
+  }
+}
+
+function initializeSettings(windowObj = window) {
+  const settingsContent = windowObj.document.querySelector(".settings-content");
+  if (settingsContent) {
+    settingsContent.innerHTML = buildSettingsPanel(windowObj);
+  }
+  setupSettingsEventListeners(windowObj);
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     getQueryParam,
@@ -207,5 +304,11 @@ if (typeof module !== "undefined" && module.exports) {
     isServiceWorkerSupported,
     registerServiceWorker,
     initializePWA,
+    toggleSettingsPanel,
+    buildSettingsPanel,
+    handleDefaultBangChange,
+    showSaveMessage,
+    setupSettingsEventListeners,
+    initializeSettings,
   };
 }
