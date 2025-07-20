@@ -133,6 +133,7 @@ function initialize(windowObj = window) {
     windowObj.document.addEventListener("DOMContentLoaded", () => {
       setupUI(windowObj);
       initializeDarkModeToggle(windowObj);
+      initializePWA(windowObj);
     });
   }
 }
@@ -155,6 +156,30 @@ function initializeDarkModeToggle(windowObj = window) {
   toggleButton.addEventListener("click", toggleDarkMode);
 }
 
+function isServiceWorkerSupported(windowObj = window) {
+  return !!(windowObj.navigator && "serviceWorker" in windowObj.navigator);
+}
+
+async function registerServiceWorker(windowObj = window) {
+  if (!isServiceWorkerSupported(windowObj)) {
+    return;
+  }
+
+  try {
+    const registration =
+      await windowObj.navigator.serviceWorker.register("/service-worker.js");
+    console.log("Service Worker registered successfully:", registration);
+  } catch (error) {
+    console.error("Service Worker registration failed:", error);
+  }
+}
+
+function initializePWA(windowObj = window) {
+  if (isServiceWorkerSupported(windowObj)) {
+    registerServiceWorker(windowObj);
+  }
+}
+
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     getQueryParam,
@@ -165,5 +190,8 @@ if (typeof module !== "undefined" && module.exports) {
     buildSearchUrl,
     toggleDarkMode,
     initializeDarkModeToggle,
+    isServiceWorkerSupported,
+    registerServiceWorker,
+    initializePWA,
   };
 }

@@ -88,6 +88,11 @@ const mockWindow = {
 };
 ```
 
+## Progressive Web App (PWA)
+
+### Cache Versioning
+Service worker uses versioned static cache (`just-bangs-static-v1`). Increment version numbers (v1→v2) when static assets change or need to force cache refresh.
+
 ## Development Workflow
 
 ### Git Workflow

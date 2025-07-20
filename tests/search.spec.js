@@ -7,6 +7,9 @@ const {
   buildSearchUrl,
   toggleDarkMode,
   initializeDarkModeToggle,
+  isServiceWorkerSupported,
+  registerServiceWorker,
+  initializePWA,
 } = require("../public_html/search.js");
 
 describe("buildSearchUrl", () => {
@@ -381,5 +384,122 @@ describe("initializeDarkModeToggle", () => {
     expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
       ".dark-mode-toggle",
     );
+  });
+});
+
+describe("PWA Functions", () => {
+  describe("isServiceWorkerSupported", () => {
+    test("returns true when serviceWorker is supported", () => {
+      const mockWindow = {
+        navigator: {
+          serviceWorker: {},
+        },
+      };
+      expect(isServiceWorkerSupported(mockWindow)).toBe(true);
+    });
+
+    test("returns false when serviceWorker is not supported", () => {
+      const mockWindow = {
+        navigator: {},
+      };
+      expect(isServiceWorkerSupported(mockWindow)).toBe(false);
+    });
+
+    test("returns false when navigator is not available", () => {
+      const mockWindow = {};
+      expect(isServiceWorkerSupported(mockWindow)).toBe(false);
+    });
+  });
+
+  describe("registerServiceWorker", () => {
+    let consoleSpy;
+
+    beforeEach(() => {
+      consoleSpy = {
+        log: jest.spyOn(console, "log").mockImplementation(),
+        error: jest.spyOn(console, "error").mockImplementation(),
+      };
+    });
+
+    afterEach(() => {
+      consoleSpy.log.mockRestore();
+      consoleSpy.error.mockRestore();
+    });
+
+    test("does nothing when service worker is not supported", async () => {
+      const mockWindow = {
+        navigator: {},
+      };
+
+      await registerServiceWorker(mockWindow);
+
+      expect(consoleSpy.log).not.toHaveBeenCalled();
+      expect(consoleSpy.error).not.toHaveBeenCalled();
+    });
+
+    test("registers service worker successfully", async () => {
+      const mockRegistration = { scope: "/" };
+      const mockRegister = jest.fn().mockResolvedValue(mockRegistration);
+      const mockWindow = {
+        navigator: {
+          serviceWorker: {
+            register: mockRegister,
+          },
+        },
+      };
+
+      await registerServiceWorker(mockWindow);
+
+      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        "Service Worker registered successfully:",
+        mockRegistration,
+      );
+    });
+
+    test("handles service worker registration failure", async () => {
+      const mockError = new Error("Registration failed");
+      const mockRegister = jest.fn().mockRejectedValue(mockError);
+      const mockWindow = {
+        navigator: {
+          serviceWorker: {
+            register: mockRegister,
+          },
+        },
+      };
+
+      await registerServiceWorker(mockWindow);
+
+      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        "Service Worker registration failed:",
+        mockError,
+      );
+    });
+  });
+
+  describe("initializePWA", () => {
+    test("calls registerServiceWorker when service worker is supported", () => {
+      const mockRegister = jest.fn().mockResolvedValue({});
+      const mockWindow = {
+        navigator: {
+          serviceWorker: {
+            register: mockRegister,
+          },
+        },
+      };
+
+      initializePWA(mockWindow);
+
+      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+    });
+
+    test("does nothing when service worker is not supported", () => {
+      const mockWindow = {
+        navigator: {},
+      };
+
+      expect(() => initializePWA(mockWindow)).not.toThrow();
+    });
   });
 });
