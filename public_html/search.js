@@ -148,6 +148,11 @@ function initializeDarkModeToggle(windowObj = window) {
   } else {
     html.classList.add("light-mode");
   }
+
+  const toggleButton = windowObj.document.querySelector(".dark-mode-toggle");
+  if (!toggleButton) return;
+
+  toggleButton.addEventListener("click", toggleDarkMode);
 }
 
 if (typeof module !== "undefined" && module.exports) {

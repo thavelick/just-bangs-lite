@@ -327,6 +327,7 @@ describe("toggleDarkMode", () => {
 describe("initializeDarkModeToggle", () => {
   let mockHTML;
   let mockWindow;
+  let mockToggleButton;
 
   beforeEach(() => {
     mockHTML = {
@@ -335,37 +336,50 @@ describe("initializeDarkModeToggle", () => {
       },
     };
 
+    mockToggleButton = {
+      addEventListener: jest.fn(),
+    };
+
     mockWindow = {
       document: {
         documentElement: mockHTML,
+        querySelector: jest.fn().mockReturnValue(mockToggleButton),
       },
       matchMedia: jest.fn(),
     };
   });
 
-  test("adds dark-mode class when system prefers dark", () => {
-    mockWindow.matchMedia.mockReturnValue({ matches: true });
+  test.each([
+    [true, "dark-mode"],
+    [false, "light-mode"],
+  ])(
+    "when system prefers dark=%s, adds %s class and sets up event handler",
+    (prefersDark, expectedClass) => {
+      mockWindow.matchMedia.mockReturnValue({ matches: prefersDark });
 
-    initializeDarkModeToggle(mockWindow);
+      initializeDarkModeToggle(mockWindow);
 
-    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
-  });
+      expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+        "(prefers-color-scheme: dark)",
+      );
+      expect(mockHTML.classList.add).toHaveBeenCalledWith(expectedClass);
+      expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
+        ".dark-mode-toggle",
+      );
+      expect(mockToggleButton.addEventListener).toHaveBeenCalledWith(
+        "click",
+        toggleDarkMode,
+      );
+    },
+  );
 
-  test("adds light-mode class when system prefers light", () => {
+  test("handles missing toggle button gracefully", () => {
     mockWindow.matchMedia.mockReturnValue({ matches: false });
+    mockWindow.document.querySelector.mockReturnValue(null);
 
-    initializeDarkModeToggle(mockWindow);
-
-    expect(mockHTML.classList.add).toHaveBeenCalledWith("light-mode");
-  });
-
-  test("calls matchMedia with correct query", () => {
-    mockWindow.matchMedia.mockReturnValue({ matches: false });
-
-    initializeDarkModeToggle(mockWindow);
-
-    expect(mockWindow.matchMedia).toHaveBeenCalledWith(
-      "(prefers-color-scheme: dark)",
+    expect(() => initializeDarkModeToggle(mockWindow)).not.toThrow();
+    expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
+      ".dark-mode-toggle",
     );
   });
 });
