@@ -85,19 +85,9 @@ const bangs = {
 - **Value**: Search URL template with `{{{s}}}` placeholder for the search term
 - The `{{{s}}}` placeholder gets replaced with the URL-encoded search query
 
-### Default Search Configuration
+### Settings
 
-Customize your default search engine via browser localStorage:
-
-```javascript
-// Set Google as default
-localStorage.setItem('default-bang', 'g');
-
-// Clear default (returns to DuckDuckGo Lite)
-localStorage.removeItem('default-bang');
-```
-
-Run these commands in your browser's Developer Tools Console (F12). Invalid values fall back to DuckDuckGo Lite.
+Configure your default search engine via the hamburger menu (☰) in the top-left corner. Select from any available bang and changes are saved automatically.
 
 ### Build Commands
 
