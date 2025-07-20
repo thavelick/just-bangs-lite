@@ -14,15 +14,15 @@ describe("Service Worker Library", () => {
 
     test("STATIC_ASSETS includes all required files", () => {
       const expectedAssets = [
-        "/",
-        "/index.html",
-        "/search.js",
-        "/main.js",
-        "/style.css",
-        "/manifest.json",
-        "/icon.svg",
-        "/service-worker.js",
-        "/service-worker-lib.js",
+        "./",
+        "./index.html",
+        "./search.js",
+        "./main.js",
+        "./style.css",
+        "./manifest.json",
+        "./icon.svg",
+        "./service-worker.js",
+        "./service-worker-lib.js",
       ];
       expect(STATIC_ASSETS).toEqual(expectedAssets);
     });

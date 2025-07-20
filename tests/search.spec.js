@@ -489,7 +489,7 @@ describe("PWA Functions", () => {
 
       await registerServiceWorker(mockWindow);
 
-      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+      expect(mockRegister).toHaveBeenCalledWith("./service-worker.js");
       expect(consoleSpy.log).toHaveBeenCalledWith(
         "Service Worker registered successfully:",
         mockRegistration,
@@ -509,7 +509,7 @@ describe("PWA Functions", () => {
 
       await registerServiceWorker(mockWindow);
 
-      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+      expect(mockRegister).toHaveBeenCalledWith("./service-worker.js");
       expect(consoleSpy.error).toHaveBeenCalledWith(
         "Service Worker registration failed:",
         mockError,
@@ -530,7 +530,7 @@ describe("PWA Functions", () => {
 
       initializePWA(mockWindow);
 
-      expect(mockRegister).toHaveBeenCalledWith("/service-worker.js");
+      expect(mockRegister).toHaveBeenCalledWith("./service-worker.js");
     });
 
     test("does nothing when service worker is not supported", () => {

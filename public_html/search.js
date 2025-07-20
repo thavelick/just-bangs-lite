@@ -177,8 +177,9 @@ async function registerServiceWorker(windowObj = window) {
   }
 
   try {
-    const registration =
-      await windowObj.navigator.serviceWorker.register("/service-worker.js");
+    const registration = await windowObj.navigator.serviceWorker.register(
+      "./service-worker.js",
+    );
     console.log("Service Worker registered successfully:", registration);
   } catch (error) {
     console.error("Service Worker registration failed:", error);

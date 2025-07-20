@@ -1,15 +1,15 @@
-const STATIC_CACHE_NAME = "just-bangs-static-v2";
+const STATIC_CACHE_NAME = "just-bangs-static-v3";
 
 const STATIC_ASSETS = [
-  "/",
-  "/index.html",
-  "/search.js",
-  "/main.js",
-  "/style.css",
-  "/manifest.json",
-  "/icon.svg",
-  "/service-worker.js",
-  "/service-worker-lib.js",
+  "./",
+  "./index.html",
+  "./search.js",
+  "./main.js",
+  "./style.css",
+  "./manifest.json",
+  "./icon.svg",
+  "./service-worker.js",
+  "./service-worker-lib.js",
 ];
 
 async function installHandler(caches, self) {
