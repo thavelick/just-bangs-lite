@@ -1,5 +1,4 @@
-const FALLBACK_SEARCH_URL =
-  "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en";
+const DEFAULT_BANG = "d";
 
 const bangs = {
   al: "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}",
@@ -30,17 +29,29 @@ function buildSearchUrl(urlTemplate, searchTerm) {
   return urlTemplate.replace(/{{{s}}}/g, fixed);
 }
 
-function processBang(query) {
+function getDefaultBang(windowObj = window) {
+  const storage = windowObj.localStorage;
+  const userDefault = storage ? storage.getItem("default-bang") : null;
+  return userDefault && bangs[userDefault] ? userDefault : DEFAULT_BANG;
+}
+
+function buildFallbackUrl(searchTerm, windowObj = window) {
+  const defaultBang = getDefaultBang(windowObj);
+  const bangUrl = bangs[defaultBang];
+  return buildSearchUrl(bangUrl, searchTerm);
+}
+
+function processBang(query, windowObj = window) {
   const trimmed = query.trim();
 
   if (trimmed.length > 2000) {
-    return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed.substring(0, 2000));
+    return buildFallbackUrl(trimmed.substring(0, 2000), windowObj);
   }
 
   if (trimmed.startsWith("!")) {
     const spaceIndex = trimmed.indexOf(" ");
     if (spaceIndex === -1) {
-      return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed);
+      return buildFallbackUrl(trimmed, windowObj);
     }
 
     const bangTag = trimmed.substring(1, spaceIndex);
@@ -61,7 +72,7 @@ function processBang(query) {
       return buildSearchUrl(bangUrl, searchTerm);
     }
   }
-  return buildSearchUrl(FALLBACK_SEARCH_URL, trimmed);
+  return buildFallbackUrl(trimmed, windowObj);
 }
 
 function getQueryParam(key, windowObj = window) {
@@ -74,7 +85,7 @@ function redirect(url, windowObj = window) {
 }
 
 function performSearch(query, windowObj = window) {
-  const url = processBang(query);
+  const url = processBang(query, windowObj);
   if (url) {
     windowObj.location.hash = `#q=${encodeURIComponent(query)}`;
     redirect(url, windowObj);
@@ -125,7 +136,7 @@ function toggleDarkMode() {
 function initialize(windowObj = window) {
   const queryParam = getQueryParam("q", windowObj);
   if (queryParam !== null) {
-    const url = processBang(queryParam);
+    const url = processBang(queryParam, windowObj);
     if (url) {
       redirect(url, windowObj);
     }
@@ -188,6 +199,8 @@ if (typeof module !== "undefined" && module.exports) {
     setupUI,
     initialize,
     buildSearchUrl,
+    getDefaultBang,
+    buildFallbackUrl,
     toggleDarkMode,
     initializeDarkModeToggle,
     isServiceWorkerSupported,
