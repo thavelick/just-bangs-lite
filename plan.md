@@ -220,3 +220,42 @@ describe('PWA Functions', () => {
 - **Performance**: Faster load times after first visit
 - **Mobile Experience**: App-like behavior on mobile devices
 - **Progressive**: Works everywhere, enhanced where supported
+
+## Service Worker Refactor - Post PWA Implementation
+
+### Overview
+Extract service worker logic into a testable library file following the same dependency injection pattern used in search.js/main.js.
+
+### Goals
+- Make service worker functions unit testable
+- Follow existing codebase patterns (lib file + minimal entry point)
+- Maintain all existing functionality
+- Add proper test coverage for service worker logic
+
+### Implementation Plan
+
+#### Phase 1: Create Service Worker Library
+- [x] Create `public_html/service-worker-lib.js` with testable functions
+- [x] Move constants (STATIC_CACHE_NAME, STATIC_ASSETS) to lib file
+- [x] Extract `installHandler(caches, self)` with dependency injection
+- [x] Extract `activateHandler(caches, self)` with dependency injection
+- [x] Add CommonJS exports for testing compatibility
+
+#### Phase 2: Simplify Service Worker Entry Point
+- [x] Refactor `public_html/service-worker.js` to use `importScripts()`
+- [x] Keep only event listeners and calls to lib functions
+- [x] Maintain fetch handler in service worker (just event binding)
+- [x] Verify service worker loads and functions correctly
+
+#### Phase 3: Add Unit Tests
+- [x] Add service worker lib tests to `tests/service-worker-lib.spec.js`
+- [x] Test `installHandler` with mock caches and self objects
+- [x] Test `activateHandler` with mock caches and self objects  
+- [x] Test error handling scenarios
+- [x] Verify constants are exported correctly
+
+#### Phase 4: Verification
+- [x] Run `make test` to ensure all tests pass
+- [x] Run `make check` for code quality
+- [x] Manual PWA testing (install, offline, caching)
+- [x] Verify no regressions in existing functionality
