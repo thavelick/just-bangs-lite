@@ -115,9 +115,7 @@ describe("Service Worker Library", () => {
       expect(mockCaches.keys).toHaveBeenCalled();
       expect(mockCaches.delete).toHaveBeenCalledWith("old-cache-v1");
       expect(mockCaches.delete).toHaveBeenCalledWith("another-old-cache");
-      expect(mockCaches.delete).not.toHaveBeenCalledWith(
-        STATIC_CACHE_NAME,
-      );
+      expect(mockCaches.delete).not.toHaveBeenCalledWith(STATIC_CACHE_NAME);
       expect(mockSelf.clients.claim).toHaveBeenCalled();
     });
 
