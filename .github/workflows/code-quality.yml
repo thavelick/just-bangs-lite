@@ -20,3 +20,6 @@ jobs:
 
       - name: Check code formatting and linting
         run: npx @biomejs/biome check .
+
+      - name: Run tests
+        run: npx jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'

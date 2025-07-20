@@ -5,6 +5,8 @@ const {
   setupUI,
   initialize,
   buildSearchUrl,
+  getDefaultBang,
+  buildFallbackUrl,
   toggleDarkMode,
   initializeDarkModeToggle,
   isServiceWorkerSupported,
@@ -64,6 +66,12 @@ describe("getQueryParam", () => {
 });
 
 describe("processBang", () => {
+  let mockWindow;
+
+  beforeEach(() => {
+    mockWindow = { localStorage: null };
+  });
+
   test("processes !-prefix format with Google bang", () => {
     const result = processBang("!g javascript tutorial");
     expect(result).toBe(
@@ -84,33 +92,64 @@ describe("processBang", () => {
   });
 
   test("falls back to DuckDuckGo for unknown search", () => {
-    const result = processBang("regular search query");
+    const result = processBang("regular search query", mockWindow);
     expect(result).toBe(
       "https://lite.duckduckgo.com/lite?q=regular%20search%20query&kl=us-en",
     );
   });
 
   test("falls back to DuckDuckGo for unknown bang", () => {
-    const result = processBang("!unknown search term");
+    const result = processBang("!unknown search term", mockWindow);
     expect(result).toBe(
       "https://lite.duckduckgo.com/lite?q=!unknown%20search%20term&kl=us-en",
     );
   });
 
   test("falls back to DuckDuckGo for bang without search term", () => {
-    const result = processBang("!gh");
+    const result = processBang("!gh", mockWindow);
     expect(result).toBe("https://lite.duckduckgo.com/lite?q=!gh&kl=us-en");
   });
 
   test("truncates extremely long queries to 2000 characters", () => {
     const longQuery = "a".repeat(2500);
-    const result = processBang(longQuery);
+    const result = processBang(longQuery, mockWindow);
     const expected =
       "https://lite.duckduckgo.com/lite?q=" +
       encodeURIComponent("a".repeat(2000)) +
       "&kl=us-en";
     expect(result).toBe(expected);
   });
+});
+
+describe("buildFallbackUrl", () => {
+  test("builds URL using default bang when no localStorage", () => {
+    const mockWindow = { localStorage: null };
+    const result = buildFallbackUrl("test query", mockWindow);
+    expect(result).toBe(
+      "https://lite.duckduckgo.com/lite?q=test%20query&kl=us-en",
+    );
+  });
+});
+
+describe("getDefaultBang", () => {
+  test("returns default bang when no localStorage", () => {
+    const mockWindow = { localStorage: null };
+    const result = getDefaultBang(mockWindow);
+    expect(result).toBe("d");
+  });
+
+  test.each([
+    ["localStorage exists but no default-bang key", null, "d"],
+    ["localStorage has valid bang", "g", "g"],
+    ["localStorage has invalid bang", "invalid", "d"],
+  ])(
+    "returns correct bang when %s",
+    (_description, localStorageValue, expected) => {
+      const mockWindow = { localStorage: { getItem: () => localStorageValue } };
+      const result = getDefaultBang(mockWindow);
+      expect(result).toBe(expected);
+    },
+  );
 });
 
 describe("performSearch", () => {
