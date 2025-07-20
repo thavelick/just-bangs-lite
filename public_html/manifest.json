@@ -1,0 +1,19 @@
+{
+  "name": "Just Bangs Lite",
+  "short_name": "Just Bangs",
+  "description": "A client-side search tool with bang shortcuts for quick searches",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1a1a1a",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "en"
+}
