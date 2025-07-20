@@ -10,8 +10,10 @@ Just Bangs Lite is a client-side search tool with bang shortcuts (e.g., `python 
 
 ### Modular Structure
 - **`public_html/search.js`**: Core library containing all search functions with dependency injection pattern
-- **`public_html/main.js`**: Simple entry point that calls `initialize()`
+- **`public_html/main.js`**: Simple entry point that ONLY calls `initialize()` - no additional code or functions
 - **`public_html/index.html`**: Loads both scripts sequentially (search.js then main.js)
+
+**IMPORTANT**: main.js exists solely to separate the function library (search.js) from execution for Jest compatibility. Adding any additional code or functions to main.js will break this separation and cause testing issues.
 
 ### Dependency Injection Pattern
 Functions that use browser objects (like `window`) accept them as parameters for testability. Most commonly this is a `windowObj = window` parameter:
@@ -97,6 +99,8 @@ const mockWindow = {
   b. Commit what we've done
   c. Push to remote
   d. Create a PR with `gh`
+- When user says "merge", do a gh pr merge with a merge commit and use the option to delete local and remote branches
+- Before merging a branch, if plan.md exists and implementation is complete, ask if plan.md should be deleted first
 
 ### Pre-Commit Checklist
 Before any commit:
@@ -109,3 +113,6 @@ Before any commit:
 
 ### CSS Guidelines
 - Always put styles in style.css, never inline
+
+### Implementation Planning Process
+When asked to plan an implementation, follow the standardized process documented in `PLANNING.md`.
