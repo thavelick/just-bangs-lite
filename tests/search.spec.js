@@ -5,6 +5,8 @@ const {
   setupUI,
   initialize,
   buildSearchUrl,
+  toggleDarkMode,
+  initializeDarkModeToggle,
 } = require("../public_html/search.js");
 
 describe("buildSearchUrl", () => {
@@ -270,5 +272,114 @@ describe("initialize", () => {
       "https://lite.duckduckgo.com/lite?q=&kl=us-en",
     );
     expect(mockDocument.addEventListener).not.toHaveBeenCalled();
+  });
+});
+
+describe("toggleDarkMode", () => {
+  let mockHTML;
+
+  beforeEach(() => {
+    mockHTML = {
+      classList: {
+        contains: jest.fn(),
+        remove: jest.fn(),
+        add: jest.fn(),
+      },
+    };
+
+    global.document = {
+      documentElement: mockHTML,
+    };
+  });
+
+  afterEach(() => {
+    delete global.document;
+  });
+
+  test("switches from dark-mode to light-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(true);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("dark-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("light-mode");
+  });
+
+  test("switches from light-mode to dark-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
+  });
+
+  test("switches from no class to dark-mode", () => {
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    toggleDarkMode();
+
+    expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
+    expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
+  });
+});
+
+describe("initializeDarkModeToggle", () => {
+  let mockHTML;
+  let mockWindow;
+  let mockToggleButton;
+
+  beforeEach(() => {
+    mockHTML = {
+      classList: {
+        add: jest.fn(),
+      },
+    };
+
+    mockToggleButton = {
+      addEventListener: jest.fn(),
+    };
+
+    mockWindow = {
+      document: {
+        documentElement: mockHTML,
+        querySelector: jest.fn().mockReturnValue(mockToggleButton),
+      },
+      matchMedia: jest.fn(),
+    };
+  });
+
+  test.each([
+    [true, "dark-mode"],
+    [false, "light-mode"],
+  ])(
+    "when system prefers dark=%s, adds %s class and sets up event handler",
+    (prefersDark, expectedClass) => {
+      mockWindow.matchMedia.mockReturnValue({ matches: prefersDark });
+
+      initializeDarkModeToggle(mockWindow);
+
+      expect(mockWindow.matchMedia).toHaveBeenCalledWith(
+        "(prefers-color-scheme: dark)",
+      );
+      expect(mockHTML.classList.add).toHaveBeenCalledWith(expectedClass);
+      expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
+        ".dark-mode-toggle",
+      );
+      expect(mockToggleButton.addEventListener).toHaveBeenCalledWith(
+        "click",
+        toggleDarkMode,
+      );
+    },
+  );
+
+  test("handles missing toggle button gracefully", () => {
+    mockWindow.matchMedia.mockReturnValue({ matches: false });
+    mockWindow.document.querySelector.mockReturnValue(null);
+
+    expect(() => initializeDarkModeToggle(mockWindow)).not.toThrow();
+    expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
+      ".dark-mode-toggle",
+    );
   });
 });

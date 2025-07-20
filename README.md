@@ -9,6 +9,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - **Browser integration**: Add as a search engine with query parameter support
 - **Back button support**: Search terms persist when navigating back
 - **Responsive design**: Clean interface that works on desktop and mobile
+- **Dark mode support**: Automatic system detection with manual toggle
 
 ## Usage
 

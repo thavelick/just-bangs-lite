@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Just Bangs Lite is a client-side search tool with bang shortcuts (e.g., `python w!` → Wikipedia search). It's a dependency-free JavaScript application that runs entirely in the browser.
+Just Bangs Lite is a client-side search tool with bang shortcuts (e.g., `python w!` → Wikipedia search). It's a dependency-free JavaScript application that runs entirely in the browser with automatic dark mode support.
 
 ## Key Architecture
 
