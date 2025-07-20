@@ -10,6 +10,7 @@ A lightweight, client-side search tool with bang shortcuts. This JavaScript vers
 - **Back button support**: Search terms persist when navigating back
 - **Responsive design**: Clean interface that works on desktop and mobile
 - **Dark mode support**: Automatic system detection with manual toggle
+- **PWA support**: Installable app with caching and offline functionality (for use with local/offline search providers)
 
 ## Usage
 
