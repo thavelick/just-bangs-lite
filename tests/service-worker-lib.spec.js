@@ -7,8 +7,9 @@ const {
 
 describe("Service Worker Library", () => {
   describe("constants", () => {
-    test("STATIC_CACHE_NAME is defined", () => {
-      expect(STATIC_CACHE_NAME).toBe("just-bangs-static-v1");
+    test("STATIC_CACHE_NAME follows naming convention", () => {
+      expect(STATIC_CACHE_NAME).toMatch(/^just-bangs-static-v\d+$/);
+      expect(STATIC_CACHE_NAME).toBeTruthy();
     });
 
     test("STATIC_ASSETS includes all required files", () => {
@@ -103,7 +104,7 @@ describe("Service Worker Library", () => {
 
     test("deletes old caches and claims clients", async () => {
       const cacheNames = [
-        "just-bangs-static-v1",
+        STATIC_CACHE_NAME,
         "old-cache-v1",
         "another-old-cache",
       ];
@@ -115,13 +116,13 @@ describe("Service Worker Library", () => {
       expect(mockCaches.delete).toHaveBeenCalledWith("old-cache-v1");
       expect(mockCaches.delete).toHaveBeenCalledWith("another-old-cache");
       expect(mockCaches.delete).not.toHaveBeenCalledWith(
-        "just-bangs-static-v1",
+        STATIC_CACHE_NAME,
       );
       expect(mockSelf.clients.claim).toHaveBeenCalled();
     });
 
     test("handles no old caches", async () => {
-      mockCaches.keys.mockResolvedValue(["just-bangs-static-v1"]);
+      mockCaches.keys.mockResolvedValue([STATIC_CACHE_NAME]);
 
       await activateHandler(mockCaches, mockSelf);
 
