@@ -18,6 +18,7 @@ const {
   showSaveMessage,
   setupSettingsEventListeners,
   initializeSettings,
+  shouldEnableCaching,
 } = require("../public_html/search.js");
 
 describe("buildSearchUrl", () => {
@@ -532,6 +533,10 @@ describe("PWA Functions", () => {
             register: mockRegister,
           },
         },
+        location: {
+          search: "",
+          hostname: "example.com",
+        },
       };
 
       initializePWA(mockWindow);
@@ -802,6 +807,26 @@ describe("Settings Functions", () => {
       };
 
       expect(() => initializeSettings(mockWindow)).not.toThrow();
+    });
+  });
+
+  describe("shouldEnableCaching", () => {
+    const testCases = [
+      // [hostname, queryString, expected, description]
+      ["localhost", "?cache=force", true, "cache=force parameter returns true"],
+      ["example.com", "?cache=disable", false, "cache=disable parameter returns false"],
+      ["localhost", "", false, "localhost hostname returns false"],
+      ["127.0.0.1", "", false, "127.0.0.1 hostname returns false"],
+      ["192.168.1.100", "", false, "192.168.x hostname returns false"],
+      ["example.com", "", true, "production hostname returns true"],
+    ];
+
+    test.each(testCases)("hostname: %s, query: %s -> %s (%s)", (hostname, search, expected, description) => {
+      const mockWindow = {
+        location: { hostname, search },
+      };
+
+      expect(shouldEnableCaching(mockWindow)).toBe(expected);
     });
   });
 });
