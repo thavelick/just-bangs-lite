@@ -119,5 +119,11 @@ Before any commit:
 ### CSS Guidelines
 - Always put styles in style.css, never inline
 
+### PWA Caching Control
+Development caching behavior can be controlled via URL parameters:
+- Default: No caching on localhost/127.0.0.1/192.168.x (dev-friendly)
+- `?cache=force` - Enable caching on local development
+- `?cache=disable` - Disable caching in production (for testing)
+
 ### Implementation Planning Process
 When asked to plan an implementation, follow the standardized process documented in `PLANNING.md`.

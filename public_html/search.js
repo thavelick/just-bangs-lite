@@ -187,8 +187,25 @@ async function registerServiceWorker(windowObj = window) {
   }
 }
 
+function shouldEnableCaching(windowObj = window) {
+  const urlParams = new URLSearchParams(windowObj.location.search);
+  const cacheParam = urlParams.get("cache");
+
+  // Explicit override via URL parameter
+  if (cacheParam === "force") return true;
+  if (cacheParam === "disable") return false;
+
+  // Default: disable caching on local development
+  const isLocal =
+    windowObj.location.hostname === "localhost" ||
+    windowObj.location.hostname === "127.0.0.1" ||
+    windowObj.location.hostname.startsWith("192.168.");
+
+  return !isLocal;
+}
+
 function initializePWA(windowObj = window) {
-  if (isServiceWorkerSupported(windowObj)) {
+  if (isServiceWorkerSupported(windowObj) && shouldEnableCaching(windowObj)) {
     registerServiceWorker(windowObj);
   }
 }
@@ -310,5 +327,6 @@ if (typeof module !== "undefined" && module.exports) {
     showSaveMessage,
     setupSettingsEventListeners,
     initializeSettings,
+    shouldEnableCaching,
   };
 }
