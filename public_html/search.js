@@ -189,17 +189,18 @@ async function registerServiceWorker(windowObj = window) {
 
 function shouldEnableCaching(windowObj = window) {
   const urlParams = new URLSearchParams(windowObj.location.search);
-  const cacheParam = urlParams.get('cache');
-  
+  const cacheParam = urlParams.get("cache");
+
   // Explicit override via URL parameter
-  if (cacheParam === 'force') return true;
-  if (cacheParam === 'disable') return false;
-  
+  if (cacheParam === "force") return true;
+  if (cacheParam === "disable") return false;
+
   // Default: disable caching on local development
-  const isLocal = windowObj.location.hostname === 'localhost' ||
-                  windowObj.location.hostname === '127.0.0.1' ||
-                  windowObj.location.hostname.startsWith('192.168.');
-  
+  const isLocal =
+    windowObj.location.hostname === "localhost" ||
+    windowObj.location.hostname === "127.0.0.1" ||
+    windowObj.location.hostname.startsWith("192.168.");
+
   return !isLocal;
 }
 
