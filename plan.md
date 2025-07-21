@@ -23,16 +23,18 @@ Comparison table showing Just Bangs Lite vs related bang redirect tools:
 | **Dependencies** | None (pure HTML/JS/CSS) | Python 3.10 | TypeScript, Vite, vite-plugin-pwa | N/A (hosted service) |
 | **Deployment** | Static hosting | Server required | Static hosting | Global CDN |
 | **Bang Source** | Built-in curated list | Downloads from DDG | Complete DDG bang list | Official bang database |
-| **Custom Bangs** | Settings panel | custom-bang.js file | Not supported | Not supported |
-| **Dark Mode** | Auto + manual toggle | Basic support | Auto only (system preference) | Yes (user preference) |
-| **PWA Support** | Yes (service worker) | No | Yes (vite-plugin-pwa) | No |
-| **Mobile Friendly** | Fully responsive | Basic | Responsive | Fully responsive |
+| **Custom Bangs** | Hard coded | ✅ custom-bang.js file | ❌ Not supported | ❌ Not supported |
+| **Dark Mode** | ✅ Auto + manual toggle | ✅ Basic support | ✅ Auto only (system preference) | ✅ Yes (user preference) |
+| **PWA Support** | ✅ Yes (service worker) | ❌ No | ✅ Yes (vite-plugin-pwa) | ❌ No |
+| **Mobile Friendly** | ✅ Fully responsive | ✅ Basic | ✅ Responsive | ✅ Fully responsive |
 | **Search Interface** | Form + URL params | URL path only | URL params only | Full search engine |
 | **Default Bang** | User configurable (settings) | Environment variable | Configurable (localStorage) | Not applicable |
-| **Offline Support** | Yes (cached) | No | Yes (PWA cached) | No |
+| **Offline Support** | ✅ Yes (cached)* | ❌ No | ✅ Yes (PWA cached)* | ❌ No |
 | **Speed** | Instant (cached) | Local server speed | Instant (cached) | Network dependent |
-| **Privacy** | Fully local | Fully local | Fully local | DDG privacy policy |
-| **Search Results** | Redirects only | Redirects only | Redirects only | Full search + redirects |
+| **Source Available** | Open source (AGPL v3) | Open source (AGPL v3) | Open source (MIT) | Proprietary |
+| **Search Results** | Just bangs | Just bangs | Only bangs | Full search + bangs |
+
+*You can use custom bangs with other locally self-hosted search engines
 
 ### 4. Project Timeline
 High-level milestones and evolution:
