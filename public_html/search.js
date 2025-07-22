@@ -123,13 +123,16 @@ function setupUI(windowObj = window) {
 
 function toggleDarkMode() {
   const html = document.documentElement;
+  const storage = typeof window !== "undefined" ? window.localStorage : null;
 
   if (html.classList.contains("dark-mode")) {
     html.classList.remove("dark-mode");
     html.classList.add("light-mode");
+    if (storage) storage.setItem("darkMode", "light");
   } else {
     html.classList.remove("light-mode");
     html.classList.add("dark-mode");
+    if (storage) storage.setItem("darkMode", "dark");
   }
 }
 
@@ -150,15 +153,23 @@ function initialize(windowObj = window) {
   }
 }
 
+function initializeContentPage(windowObj = window) {
+  windowObj.document.addEventListener("DOMContentLoaded", () => {
+    initializeDarkModeToggle(windowObj);
+  });
+}
+
 function initializeDarkModeToggle(windowObj = window) {
   const html = windowObj.document.documentElement;
+  const storage = windowObj.localStorage;
+  const savedMode = storage ? storage.getItem("darkMode") : null;
   const prefersDark = windowObj.matchMedia(
     "(prefers-color-scheme: dark)",
   ).matches;
 
-  if (prefersDark) {
+  if (savedMode === "dark" || (savedMode === null && prefersDark)) {
     html.classList.add("dark-mode");
-  } else {
+  } else if (savedMode === "light" || (savedMode === null && !prefersDark)) {
     html.classList.add("light-mode");
   }
 
@@ -313,6 +324,7 @@ if (typeof module !== "undefined" && module.exports) {
     performSearch,
     setupUI,
     initialize,
+    initializeContentPage,
     buildSearchUrl,
     getDefaultBang,
     buildFallbackUrl,

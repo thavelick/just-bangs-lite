@@ -1,0 +1,242 @@
+/* About page styles extending main site CSS */
+
+body {
+  position: static;
+  top: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.nav-links {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ddd;
+  border: none;
+  border-radius: 25px;
+  width: 50px;
+  height: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.toggle-slider::after {
+  content: "☀️";
+}
+
+html.dark-mode .dark-mode-toggle {
+  background: #555;
+}
+
+html.dark-mode .toggle-slider {
+  transform: translateX(25px);
+  background: #333;
+}
+
+html.dark-mode .toggle-slider::after {
+  content: "🌙";
+}
+
+section {
+  margin: 40px 0;
+}
+
+h2 {
+  color: #2d4f8e;
+  border-bottom: 2px solid #de5833;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+html.dark-mode h2 {
+  color: #87ceeb;
+  border-bottom-color: #ff6b47;
+}
+
+.hero {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 40px 0;
+}
+
+html.dark-mode .hero {
+  background: linear-gradient(135deg, #2d4f8e 0%, #1e3a6f 100%);
+}
+
+.hero h2 {
+  margin-top: 0;
+  border: none;
+  color: #2d4f8e;
+  font-size: 2.5em;
+}
+
+html.dark-mode .hero h2 {
+  color: white;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.feature-item {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #64bb45;
+}
+
+html.dark-mode .feature-item {
+  background: #3a5f9e;
+  border-left-color: #7fd95f;
+}
+
+.comparison-table {
+  overflow-x: auto;
+  margin: 30px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+html.dark-mode table {
+  background: #3a5f9e;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+html.dark-mode th,
+html.dark-mode td {
+  border-bottom-color: #555;
+}
+
+th {
+  background: #f8f9fa;
+  font-weight: bold;
+  color: #2d4f8e;
+}
+
+html.dark-mode th {
+  background: #2d4f8e;
+  color: white;
+}
+
+.timeline {
+  position: relative;
+  margin: 40px 0;
+}
+
+.timeline-item {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #de5833;
+}
+
+html.dark-mode .timeline-item {
+  background: #3a5f9e;
+  border-left-color: #ff6b47;
+}
+
+.timeline-date {
+  font-weight: bold;
+  color: #de5833;
+  margin-bottom: 10px;
+}
+
+html.dark-mode .timeline-date {
+  color: #ff6b47;
+}
+
+.github-section {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 40px 0;
+}
+
+html.dark-mode .github-section {
+  background: #3a5f9e;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 80px 15px 20px;
+  }
+
+  .nav-links {
+    position: static;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+
+  .hero {
+    padding: 20px;
+  }
+
+  .hero h2 {
+    font-size: 1.8em;
+  }
+
+  .comparison-table {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}

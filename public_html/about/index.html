@@ -1,0 +1,251 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="../icon.svg" />
+    <title>About Just Bangs Lite</title>
+    <script src="../search.js"></script>
+    <script src="../content.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="nav-links">
+      <a href="../">← Back to Search</a>
+    </div>
+    
+
+    <button class="dark-mode-toggle">
+      <div class="toggle-slider"></div>
+    </button>
+
+    <div class="header">
+      <h1>About Just Bangs! Lite</h1>
+    </div>
+
+    <div class="hero">
+      <h2>Lightning-Fast Search Shortcuts</h2>
+      <p>Just Bangs Lite is a client-side search tool that turns your browser into a powerful search launcher using bang shortcuts. Type <strong>stranger things jw!</strong> to find where to watch on JustWatch, or <strong>!e vintage vinyl records</strong> to search eBay for vintage vinyl records.</p>
+    </div>
+
+    <section>
+      <h2>What Just Bangs Lite Does</h2>
+      <p>Just Bangs Lite provides instant access to hundreds of websites through simple text shortcuts called "bangs". Instead of navigating to a website and then searching, you can search directly from one simple interface.</p>
+      
+      <div class="feature-list">
+        <div class="feature-item">
+          <h3>Client-Side Only</h3>
+          <p>Runs entirely in your browser with zero server dependencies. No data ever leaves your device.</p>
+        </div>
+        <div class="feature-item">
+          <h3>Dependency-Free</h3>
+          <p>Pure HTML, CSS, and JavaScript. No frameworks, no build steps, no package.json.</p>
+        </div>
+        <div class="feature-item">
+          <h3>Smart Dark Mode</h3>
+          <p>Automatic dark mode detection with manual toggle. Respects your system preferences.</p>
+        </div>
+        <div class="feature-item">
+          <h3>Mobile-First</h3>
+          <p>Fully responsive design optimized for both desktop and mobile devices.</p>
+        </div>
+        <div class="feature-item">
+          <h3>Configurable</h3>
+          <p>Set your default search engine and customize your search experience.</p>
+        </div>
+        <div class="feature-item">
+          <h3>Privacy-Focused</h3>
+          <p>No tracking, no analytics, no data collection. Your searches stay private.</p>
+        </div>
+      </div>
+
+      <h3>Example Usage</h3>
+      <ul>
+        <li><code>cats w!</code> → Search Wikipedia for "cats"</li>
+        <li><code>!e vintage vinyl records</code> → Search eBay for "vintage vinyl records"</li>
+        <li><code>stranger things jw!</code> → Find where to watch on JustWatch</li>
+        <li><code>!g chocolate cake recipes</code> → Search Google for "chocolate cake recipes"</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Feature Comparison</h2>
+      <p>How Just Bangs Lite compares to related bang redirect tools:</p>
+      
+      <div class="comparison-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Just Bangs Lite</th>
+              <th>Original Just Bangs</th>
+              <th>Unduck</th>
+              <th>DuckDuckGo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Architecture</strong></td>
+              <td>Client-side only</td>
+              <td>Python server</td>
+              <td>Client-side only</td>
+              <td>Server-side (global)</td>
+            </tr>
+            <tr>
+              <td><strong>Dependencies</strong></td>
+              <td>None (pure HTML/JS/CSS)</td>
+              <td>Python 3.10</td>
+              <td>TypeScript, Vite, vite-plugin-pwa</td>
+              <td>N/A (hosted service)</td>
+            </tr>
+            <tr>
+              <td><strong>Deployment</strong></td>
+              <td>Static hosting</td>
+              <td>Server required</td>
+              <td>Static hosting</td>
+              <td>Global CDN</td>
+            </tr>
+            <tr>
+              <td><strong>Bang Source</strong></td>
+              <td>Built-in curated list</td>
+              <td>Downloads from DDG</td>
+              <td>Complete DDG bang list</td>
+              <td>Official bang database</td>
+            </tr>
+            <tr>
+              <td><strong>Custom Bangs</strong></td>
+              <td>Hard coded</td>
+              <td>✅ custom-bang.js file</td>
+              <td>❌ Not supported</td>
+              <td>❌ Not supported</td>
+            </tr>
+            <tr>
+              <td><strong>Dark Mode</strong></td>
+              <td>✅ Auto + manual toggle</td>
+              <td>✅ Basic support</td>
+              <td>✅ Auto only (system preference)</td>
+              <td>✅ Yes (user preference)</td>
+            </tr>
+            <tr>
+              <td><strong>PWA Support</strong></td>
+              <td>✅ Yes (service worker)</td>
+              <td>❌ No</td>
+              <td>✅ Yes (vite-plugin-pwa)</td>
+              <td>❌ No</td>
+            </tr>
+            <tr>
+              <td><strong>Mobile Friendly</strong></td>
+              <td>✅ Fully responsive</td>
+              <td>✅ Basic</td>
+              <td>✅ Responsive</td>
+              <td>✅ Fully responsive</td>
+            </tr>
+            <tr>
+              <td><strong>Search Interface</strong></td>
+              <td>Form + URL params</td>
+              <td>Form + URL path</td>
+              <td>URL params only</td>
+              <td>Full search engine</td>
+            </tr>
+            <tr>
+              <td><strong>Default Bang</strong></td>
+              <td>User configurable (settings)</td>
+              <td>Environment variable</td>
+              <td>Configurable (localStorage)</td>
+              <td>Not applicable</td>
+            </tr>
+            <tr>
+              <td><strong>Offline Support</strong></td>
+              <td>✅ Yes (cached)*</td>
+              <td>❌ No</td>
+              <td>✅ Yes (PWA cached)*</td>
+              <td>❌ No</td>
+            </tr>
+            <tr>
+              <td><strong>Speed</strong></td>
+              <td>Instant (cached)</td>
+              <td>Local server speed</td>
+              <td>Instant (cached)</td>
+              <td>Network dependent</td>
+            </tr>
+            <tr>
+              <td><strong>Source Available</strong></td>
+              <td>Open source (AGPL v3)</td>
+              <td>Open source (AGPL v3)</td>
+              <td>Open source (MIT)</td>
+              <td>Proprietary</td>
+            </tr>
+            <tr>
+              <td><strong>Search Results</strong></td>
+              <td>Just bangs</td>
+              <td>Just bangs</td>
+              <td>Only bangs</td>
+              <td>Full search + bangs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p><em>*You can use custom bangs with other locally self-hosted search engines</em></p>
+    </section>
+
+    <section>
+      <h2>Project Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">Original Just Bangs (2022-2025)</div>
+          <ul>
+            <li><strong>Early April 2022:</strong> <a href="https://idiomdrottning.org/about" target="_blank">Idiomdrottning</a> conceived initial idea for a bang redirects website</li>
+            <li><strong>April 7, 2022:</strong> Tristan coded up the original version in Python</li>
+            <li><strong>April 8, 2022:</strong> Idiomdrottning added custom bang support (custom-bang.js)</li>
+            <li><strong>April 24, 2022:</strong> Added dark mode support</li>
+            <li><strong>September 2023:</strong> Added OpenSearch browser integration</li>
+            <li><strong>2025:</strong> Ongoing maintenance and refinements</li>
+          </ul>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-date">Just Bangs Lite (July 2025)</div>
+          <ul>
+            <li><strong>July 18, 2025:</strong> Completed rewrite as client-side JavaScript application</li>
+            <li><strong>July 18, 2025:</strong> Added modular architecture with dependency injection for testing</li>
+            <li><strong>July 18, 2025:</strong> Implemented Jest unit testing without package.json</li>
+            <li><strong>July 18, 2025:</strong> Added Biome for formatting/linting and GitHub Actions CI/CD</li>
+            <li><strong>July 20, 2025:</strong> Added PWA features with service worker and environment-aware caching</li>
+            <li><strong>July 20, 2025:</strong> Implemented settings panel with hamburger menu and configurable default bang</li>
+            <li><strong>July 20, 2025:</strong> Added mobile responsiveness and responsive design</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="github-section">
+        <h2>Open Source & Contributing</h2>
+        <p>Just Bangs Lite is open source software licensed under AGPL v3. We welcome contributions, bug reports, and feature requests!</p>
+        
+        <p style="margin-top: 20px;">
+          <a href="https://github.com/thavelick/just-bangs-lite" target="_blank">View Source Code</a>
+        </p>
+        
+        <p style="margin-top: 30px;">
+          <strong>How to Contribute:</strong><br>
+          • Fork the repository and create a feature branch<br>
+          • Make your changes and add tests if applicable<br>
+          • Run <code>make check</code> and <code>make test</code> to verify your changes<br>
+          • Submit a pull request with a clear description of your changes
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Credits</h2>
+      <ul>
+        <li><a href="https://idiomdrottning.org/about" target="_blank">Idiomdrottning</a> - original idea for bang redirects website, custom bangs concept</li>
+        <li><a href="https://tristanhavelick.com" target="_blank">Tristan Havelick</a> - ongoing programming and enhancement</li>
+      </ul>
+    </section>
+
+  </body>
+</html>

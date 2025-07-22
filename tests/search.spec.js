@@ -4,6 +4,7 @@ const {
   performSearch,
   setupUI,
   initialize,
+  initializeContentPage,
   buildSearchUrl,
   getDefaultBang,
   buildFallbackUrl,
@@ -371,6 +372,39 @@ describe("toggleDarkMode", () => {
     expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
     expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
   });
+
+  test("saves dark mode preference to localStorage", () => {
+    const mockStorage = { setItem: jest.fn() };
+    global.window = { localStorage: mockStorage };
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    toggleDarkMode();
+
+    expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "dark");
+
+    delete global.window;
+  });
+
+  test("saves light mode preference to localStorage", () => {
+    const mockStorage = { setItem: jest.fn() };
+    global.window = { localStorage: mockStorage };
+    mockHTML.classList.contains.mockReturnValue(true);
+
+    toggleDarkMode();
+
+    expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "light");
+
+    delete global.window;
+  });
+
+  test("handles missing localStorage gracefully", () => {
+    global.window = {};
+    mockHTML.classList.contains.mockReturnValue(false);
+
+    expect(() => toggleDarkMode()).not.toThrow();
+
+    delete global.window;
+  });
 });
 
 describe("initializeDarkModeToggle", () => {
@@ -404,6 +438,7 @@ describe("initializeDarkModeToggle", () => {
   ])(
     "when system prefers dark=%s, adds %s class and sets up event handler",
     (prefersDark, expectedClass) => {
+      mockWindow.localStorage = null;
       mockWindow.matchMedia.mockReturnValue({ matches: prefersDark });
 
       initializeDarkModeToggle(mockWindow);
@@ -422,6 +457,24 @@ describe("initializeDarkModeToggle", () => {
     },
   );
 
+  test.each([
+    ["dark", "dark-mode"],
+    ["light", "light-mode"],
+  ])(
+    "when localStorage has saved preference '%s', uses that over system preference",
+    (savedMode, expectedClass) => {
+      mockWindow.localStorage = {
+        getItem: jest.fn().mockReturnValue(savedMode),
+      };
+      mockWindow.matchMedia.mockReturnValue({ matches: false });
+
+      initializeDarkModeToggle(mockWindow);
+
+      expect(mockWindow.localStorage.getItem).toHaveBeenCalledWith("darkMode");
+      expect(mockHTML.classList.add).toHaveBeenCalledWith(expectedClass);
+    },
+  );
+
   test("handles missing toggle button gracefully", () => {
     mockWindow.matchMedia.mockReturnValue({ matches: false });
     mockWindow.document.querySelector.mockReturnValue(null);
@@ -429,6 +482,23 @@ describe("initializeDarkModeToggle", () => {
     expect(() => initializeDarkModeToggle(mockWindow)).not.toThrow();
     expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
       ".dark-mode-toggle",
+    );
+  });
+});
+
+describe("initializeContentPage", () => {
+  test("adds DOMContentLoaded event listener", () => {
+    const mockWindow = {
+      document: {
+        addEventListener: jest.fn(),
+      },
+    };
+
+    initializeContentPage(mockWindow);
+
+    expect(mockWindow.document.addEventListener).toHaveBeenCalledWith(
+      "DOMContentLoaded",
+      expect.any(Function),
     );
   });
 });

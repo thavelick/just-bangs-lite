@@ -3,6 +3,27 @@ input {
   font-family: "Tex Gyre Heros", "Nimbus Sans L", Helvetica, Arial, sans-serif;
 }
 
+/* Universal link styles */
+a {
+  color: #2d4f8e;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #1e3a6f;
+  text-decoration: none;
+}
+
+html.dark-mode a {
+  color: #87ceeb;
+}
+
+html.dark-mode a:hover {
+  color: #add8e6;
+}
+
 html {
   font-size: 100%;
   background: white;
@@ -210,6 +231,18 @@ html.dark-mode .settings-content {
 
 html.dark-mode .settings-header {
   border-bottom-color: #555;
+}
+
+.main-footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.footer-about-link {
+  font-size: 16px;
 }
 
 .settings-header h2 {

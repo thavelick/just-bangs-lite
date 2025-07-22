@@ -105,6 +105,11 @@ No build process or external dependencies required for the core application.
 
 GNU Affero General Public License v3.0 - same as the original just-bangs project.
 
+## Created By
+
+- [Idiomdrottning](https://idiomdrottning.org/about) - original idea for bang redirects website, custom bangs concept
+- [Tristan Havelick](https://tristanhavelick.com) - ongoing programming and enhancement
+
 ## Related Projects
 
 - [just-bangs](https://github.com/thavelick/just-bangs) - The original Python server-based version
