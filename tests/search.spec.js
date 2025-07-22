@@ -463,7 +463,9 @@ describe("initializeDarkModeToggle", () => {
   ])(
     "when localStorage has saved preference '%s', uses that over system preference",
     (savedMode, expectedClass) => {
-      mockWindow.localStorage = { getItem: jest.fn().mockReturnValue(savedMode) };
+      mockWindow.localStorage = {
+        getItem: jest.fn().mockReturnValue(savedMode),
+      };
       mockWindow.matchMedia.mockReturnValue({ matches: false });
 
       initializeDarkModeToggle(mockWindow);

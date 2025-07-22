@@ -123,7 +123,7 @@ function setupUI(windowObj = window) {
 
 function toggleDarkMode() {
   const html = document.documentElement;
-  const storage = typeof window !== 'undefined' ? window.localStorage : null;
+  const storage = typeof window !== "undefined" ? window.localStorage : null;
 
   if (html.classList.contains("dark-mode")) {
     html.classList.remove("dark-mode");
