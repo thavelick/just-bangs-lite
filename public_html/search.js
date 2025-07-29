@@ -20,6 +20,7 @@ const bangs = {
   a: "https://www.amazon.com/s?k={{{s}}}",
   pypi: "https://pypi.org/search/?q={{{s}}}",
   w: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
+  i: "https://duckduckgo.com/?q={{{s}}}&iax=images&ia=images",
 };
 
 function buildSearchUrl(urlTemplate, searchTerm) {
