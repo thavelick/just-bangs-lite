@@ -21,6 +21,7 @@ const bangs = {
   pypi: "https://pypi.org/search/?q={{{s}}}",
   w: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
   i: "https://duckduckgo.com/?q={{{s}}}&iax=images&ia=images",
+  yt: "https://www.youtube.com/results?search_query={{{s}}}",
 };
 
 function buildSearchUrl(urlTemplate, searchTerm) {
@@ -246,7 +247,11 @@ function buildSettingsPanel(windowObj = window) {
       <div class="bang-list">
   `;
 
-  for (const [bangKey, bangUrl] of Object.entries(bangs)) {
+  const sortedBangs = Object.entries(bangs).sort(([a], [b]) =>
+    a.localeCompare(b),
+  );
+
+  for (const [bangKey, bangUrl] of sortedBangs) {
     const isChecked = bangKey === currentDefault ? " checked" : "";
     html += `
       <div class="bang-trigger">${bangKey}!</div>

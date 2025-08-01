@@ -13,19 +13,19 @@ dev: # Start development server
 
 format: # Format code with Biome
 	@echo "Formatting code.."
-	npx @biomejs/biome format --write .
+	npx --yes @biomejs/biome format --write .
 
 lint: # Lint code with Biome
 	@echo "Linting code.."
-	npx @biomejs/biome lint .
+	npx --yes @biomejs/biome lint .
 
 check: # Check formatting and linting with Biome
 	@echo "Checking formatting and linting.."
-	npx @biomejs/biome check .
+	npx --yes @biomejs/biome check .
 
 test: # Run unit tests with Jest
 	@echo "Running tests.."
-	npx jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+	npx --yes jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
 
 # -----------------------------------------------------------
 # CAUTION: If you have a file with the same name as make
