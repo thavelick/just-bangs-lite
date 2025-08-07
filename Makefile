@@ -25,7 +25,7 @@ check: # Check formatting and linting with Biome
 
 test: # Run unit tests with Jest
 	@echo "Running tests.."
-	npx --yes jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+	bunx jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
 
 # -----------------------------------------------------------
 # CAUTION: If you have a file with the same name as make

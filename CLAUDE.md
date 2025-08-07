@@ -24,7 +24,7 @@ function someFunction(param, windowObj = window) { ... }
 The `= window` default parameter makes the real browser object the default, allowing seamless browser usage while enabling tests to pass mock objects.
 
 ### Testing Without package.json
-- Uses Jest via `npx jest` with custom configuration
+- Uses Jest via `bunx jest` with custom configuration
 - CommonJS exports in search.js for Node.js compatibility: `module.exports = { ... }`
 - Test files in `tests/` directory with `.spec.js` extension
 - All functions tested with mock browser objects as needed
@@ -43,10 +43,10 @@ make check      # Run both formatting and linting checks
 ### Running Specific Tests
 ```bash
 # Run single test file
-npx jest tests/search.spec.js -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+bunx jest tests/search.spec.js -c '{"testMatch":["**/tests/**/*.spec.js"]}'
 
 # Run specific test pattern
-npx jest -t "processBang" -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+bunx jest -t "processBang" -c '{"testMatch":["**/tests/**/*.spec.js"]}'}
 ```
 
 ## Code Quality Tools

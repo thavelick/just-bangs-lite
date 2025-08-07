@@ -99,6 +99,10 @@ make lint    # Check code style
 make check   # Run formatting and linting checks
 ```
 
+**Development Requirements:**
+- [Bun](https://bun.sh/) - Fast package manager and test runner (for Jest execution)
+- Python 3 - Development server via `python -m http.server`
+
 No build process or external dependencies required for the core application.
 
 ## License
