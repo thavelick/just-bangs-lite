@@ -767,7 +767,15 @@ describe("Settings Functions", () => {
   });
 
   describe("showSaveMessage", () => {
-    test("shows and hides save message", (done) => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    test("shows and hides save message", () => {
       const mockMessage = {
         classList: {
           add: jest.fn(),
@@ -784,10 +792,9 @@ describe("Settings Functions", () => {
 
       expect(mockMessage.classList.add).toHaveBeenCalledWith("visible");
 
-      setTimeout(() => {
-        expect(mockMessage.classList.remove).toHaveBeenCalledWith("visible");
-        done();
-      }, 2100);
+      jest.advanceTimersByTime(2000);
+
+      expect(mockMessage.classList.remove).toHaveBeenCalledWith("visible");
     });
 
     test("handles missing message element gracefully", () => {
