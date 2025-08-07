@@ -281,11 +281,12 @@ html.dark-mode .close-button:hover {
   color: #64bb45;
   font-size: 14px;
   margin: 0;
-  opacity: 0;
+  display: none;
   transition: opacity 0.3s ease;
 }
 
 .save-message.visible {
+  display: block;
   opacity: 1;
 }
 

@@ -327,7 +327,14 @@ function initializeSettings(windowObj = window) {
   if (settingsDialog) {
     settingsDialog.setWindow(windowObj);
   }
-  setupSettingsEventListeners(windowObj);
+
+  // Set up hamburger button listener
+  const hamburgerButton = windowObj.document.querySelector(".hamburger-menu");
+  if (hamburgerButton) {
+    hamburgerButton.addEventListener("click", () =>
+      toggleSettingsPanel(windowObj),
+    );
+  }
 }
 
 const SettingsDialogBase =
@@ -489,7 +496,7 @@ class SaveMessage extends SaveMessageBase {
   }
 
   render() {
-    this.className = "save-message";
+    this.classList.add("save-message");
     this.id = "save-message";
     if (!this.textContent) {
       this.textContent = "✓ Changes saved automatically";
