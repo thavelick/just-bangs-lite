@@ -309,6 +309,11 @@ html.dark-mode .save-message {
   margin: 16px 0;
 }
 
+setting-option,
+save-message {
+  display: contents;
+}
+
 .bang-trigger {
   font-family: monospace;
   font-weight: bold;

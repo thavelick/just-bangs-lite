@@ -224,11 +224,16 @@ function initializePWA(windowObj = window) {
 }
 
 function toggleSettingsPanel(windowObj = window) {
-  const panel = windowObj.document.querySelector(".settings-panel");
-  if (!panel) return;
-
-  const isHidden = panel.getAttribute("aria-hidden") === "true";
-  panel.setAttribute("aria-hidden", isHidden ? "false" : "true");
+  const settingsDialog = windowObj.document.querySelector("settings-dialog");
+  if (settingsDialog && typeof settingsDialog.toggle === "function") {
+    settingsDialog.toggle();
+  } else {
+    // Fallback for when components aren't registered yet
+    const panel = windowObj.document.querySelector(".settings-panel");
+    if (!panel) return;
+    const isHidden = panel.getAttribute("aria-hidden") === "true";
+    panel.setAttribute("aria-hidden", isHidden ? "false" : "true");
+  }
 }
 
 function buildSettingsPanel(windowObj = window) {
@@ -316,11 +321,199 @@ function setupSettingsEventListeners(windowObj = window) {
 }
 
 function initializeSettings(windowObj = window) {
-  const settingsContent = windowObj.document.querySelector(".settings-content");
-  if (settingsContent) {
-    settingsContent.innerHTML = buildSettingsPanel(windowObj);
+  registerSettingsComponents(windowObj);
+
+  const settingsDialog = windowObj.document.querySelector("settings-dialog");
+  if (settingsDialog) {
+    settingsDialog.setWindow(windowObj);
   }
   setupSettingsEventListeners(windowObj);
+}
+
+const SettingsDialogBase =
+  typeof HTMLElement !== "undefined" ? HTMLElement : class {};
+
+class SettingsDialog extends SettingsDialogBase {
+  constructor() {
+    super();
+    this.windowObj = window;
+  }
+
+  setWindow(windowObj) {
+    this.windowObj = windowObj;
+  }
+
+  connectedCallback() {
+    this.render();
+    this.setupEventListeners();
+  }
+
+  render() {
+    const currentDefault = getDefaultBang(this.windowObj);
+    const sortedBangs = Object.entries(bangs).sort(([a], [b]) =>
+      a.localeCompare(b),
+    );
+
+    let html = `
+      <div class="settings-header">
+        <h2>
+          Settings
+          <button class="close-button" type="button" aria-label="Close settings">×</button>
+        </h2>
+        <save-message>✓ Changes saved automatically</save-message>
+      </div>
+      <div class="settings-body">
+        <h3>Default Search Engine</h3>
+        <div class="bang-list">
+    `;
+
+    for (const [bangKey, bangUrl] of sortedBangs) {
+      const isSelected = bangKey === currentDefault;
+      html += `<setting-option bang-key="${bangKey}" bang-url="${bangUrl}"${isSelected ? " selected" : ""}></setting-option>`;
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    this.innerHTML = html;
+  }
+
+  setupEventListeners() {
+    this.addEventListener("click", (event) => {
+      if (event.target.classList.contains("close-button")) {
+        this.hide();
+      }
+    });
+  }
+
+  show() {
+    this.closest(".settings-panel")?.setAttribute("aria-hidden", "false");
+  }
+
+  hide() {
+    this.closest(".settings-panel")?.setAttribute("aria-hidden", "true");
+  }
+
+  toggle() {
+    const panel = this.closest(".settings-panel");
+    if (!panel) return;
+    const isHidden = panel.getAttribute("aria-hidden") === "true";
+    panel.setAttribute("aria-hidden", isHidden ? "false" : "true");
+  }
+}
+
+const SettingOptionBase =
+  typeof HTMLElement !== "undefined" ? HTMLElement : class {};
+
+class SettingOption extends SettingOptionBase {
+  constructor() {
+    super();
+    this.windowObj = window;
+  }
+
+  setWindow(windowObj) {
+    this.windowObj = windowObj;
+  }
+
+  connectedCallback() {
+    this.render();
+    this.setupEventListeners();
+  }
+
+  render() {
+    const bangKey = this.getAttribute("bang-key");
+    const bangUrl = this.getAttribute("bang-url");
+    const isSelected = this.hasAttribute("selected");
+
+    this.innerHTML = `
+      <div class="bang-trigger">${bangKey}!</div>
+      <div class="bang-url">${bangUrl}</div>
+      <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isSelected ? " checked" : ""}>
+    `;
+  }
+
+  setupEventListeners() {
+    const radio = this.querySelector('input[type="radio"]');
+    if (radio) {
+      radio.addEventListener("change", (event) => {
+        this.handleChange(event);
+      });
+    }
+  }
+
+  handleChange(event) {
+    if (event.target.name === "default-bang") {
+      const storage = this.windowObj.localStorage;
+      if (storage) {
+        storage.setItem("default-bang", event.target.value);
+        const saveMessage =
+          this.closest("settings-dialog")?.querySelector("save-message");
+        if (saveMessage && typeof saveMessage.show === "function") {
+          saveMessage.show();
+        }
+      }
+    }
+  }
+
+  setSelected(selected) {
+    // This method is called before render(), so just update the attribute
+    if (selected) {
+      this.setAttribute("selected", "");
+    } else {
+      this.removeAttribute("selected");
+    }
+  }
+
+  getValue() {
+    return this.getAttribute("bang-key");
+  }
+}
+
+const SaveMessageBase =
+  typeof HTMLElement !== "undefined" ? HTMLElement : class {};
+
+class SaveMessage extends SaveMessageBase {
+  constructor() {
+    super();
+    this.windowObj = window;
+  }
+
+  setWindow(windowObj) {
+    this.windowObj = windowObj;
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  render() {
+    this.className = "save-message";
+    this.id = "save-message";
+    if (!this.textContent) {
+      this.textContent = "✓ Changes saved automatically";
+    }
+  }
+
+  show() {
+    this.classList.add("visible");
+    this.windowObj.setTimeout(() => {
+      this.hide();
+    }, 2000);
+  }
+
+  hide() {
+    this.classList.remove("visible");
+  }
+}
+
+function registerSettingsComponents(windowObj = window) {
+  if (typeof windowObj.customElements !== "undefined") {
+    windowObj.customElements.define("settings-dialog", SettingsDialog);
+    windowObj.customElements.define("setting-option", SettingOption);
+    windowObj.customElements.define("save-message", SaveMessage);
+  }
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -346,5 +539,9 @@ if (typeof module !== "undefined" && module.exports) {
     setupSettingsEventListeners,
     initializeSettings,
     shouldEnableCaching,
+    SettingsDialog,
+    SettingOption,
+    SaveMessage,
+    registerSettingsComponents,
   };
 }

@@ -855,25 +855,32 @@ describe("Settings Functions", () => {
 
   describe("initializeSettings", () => {
     test("sets content and sets up listeners", () => {
-      const mockContent = {
+      const mockDialog = {
+        setWindow: jest.fn(),
         innerHTML: "",
       };
       const mockWindow = {
         document: {
           querySelector: jest.fn((selector) => {
-            if (selector === ".settings-content") return mockContent;
+            if (selector === "settings-dialog") return mockDialog;
             return null;
           }),
         },
         localStorage: {
           getItem: jest.fn().mockReturnValue("d"),
         },
+        customElements: {
+          define: jest.fn(),
+        },
       };
 
       initializeSettings(mockWindow);
 
-      expect(mockContent.innerHTML).toContain("Settings");
-      expect(mockContent.innerHTML).toContain("Default Search Engine");
+      expect(mockDialog.setWindow).toHaveBeenCalledWith(mockWindow);
+      expect(mockWindow.customElements.define).toHaveBeenCalledWith(
+        "settings-dialog",
+        expect.any(Function),
+      );
     });
 
     test("handles missing content element gracefully", () => {
