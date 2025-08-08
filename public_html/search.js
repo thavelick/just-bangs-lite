@@ -281,7 +281,7 @@ function showSaveMessage(windowObj = window) {
   const saveMessage = windowObj.document.getElementById("save-message");
   if (saveMessage) {
     saveMessage.classList.add("visible");
-    setTimeout(() => {
+    windowObj.setTimeout(() => {
       saveMessage.classList.remove("visible");
     }, 2000);
   }
