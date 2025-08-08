@@ -15,9 +15,9 @@ format: # Format code with Biome
 	@echo "Formatting code.."
 	bunx --bun @biomejs/biome format --write .
 
-lint: # Lint code with Biome
-	@echo "Linting code.."
-	bunx --bun @biomejs/biome lint .
+lint: # Check code with Biome (formatting, linting, imports)
+	@echo "Checking code.."
+	bunx --bun @biomejs/biome check .
 
 check: # Check formatting and linting with Biome
 	@echo "Checking formatting and linting.."
