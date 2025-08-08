@@ -3,7 +3,7 @@ const {
   activateHandler,
   STATIC_CACHE_NAME,
   STATIC_ASSETS,
-} = require("../public_html/service-worker-lib.js");
+} = require("../../public_html/service-worker-lib.js");
 
 describe("Service Worker Library", () => {
   describe("constants", () => {

@@ -20,7 +20,7 @@ const {
   setupSettingsEventListeners,
   initializeSettings,
   shouldEnableCaching,
-} = require("../public_html/search.js");
+} = require("../../public_html/search.js");
 
 describe("buildSearchUrl", () => {
   test("replaces template placeholder with encoded search term", () => {

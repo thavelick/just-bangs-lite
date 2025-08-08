@@ -2,10 +2,7 @@
   "name": "just-bangs-lite",
   "version": "1.0.0",
   "description": "Client-side search tool with bang shortcuts",
-  "scripts": {
-    "test": "bun test"
-  },
   "devDependencies": {
-    "jsdom": "^26.1.0"
+    "@playwright/test": "^1.49.1"
   }
 }
