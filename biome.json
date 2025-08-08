@@ -1,6 +1,22 @@
 {
   "formatter": {
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "includes": [
+      "public_html/**",
+      "tests/**",
+      "*.js",
+      "*.json",
+      "!test-results/**"
+    ]
+  },
+  "linter": {
+    "includes": [
+      "public_html/**",
+      "tests/**",
+      "*.js",
+      "*.json",
+      "!test-results/**"
+    ]
   }
 }
