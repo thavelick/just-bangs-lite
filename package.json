@@ -1,0 +1,8 @@
+{
+  "name": "just-bangs-lite",
+  "version": "1.0.0",
+  "description": "Client-side search tool with bang shortcuts",
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}
