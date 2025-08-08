@@ -14,10 +14,7 @@ const {
   registerServiceWorker,
   initializePWA,
   toggleSettingsPanel,
-  buildSettingsPanel,
-  handleDefaultBangChange,
   showSaveMessage,
-  setupSettingsEventListeners,
   initializeSettings,
   shouldEnableCaching,
 } = require("../../public_html/search.js");
@@ -675,97 +672,6 @@ describe("Settings Functions", () => {
     });
   });
 
-  describe("buildSettingsPanel", () => {
-    test("generates HTML with current default selected", () => {
-      const mockWindow = {
-        localStorage: {
-          getItem: jest.fn().mockReturnValue("g"),
-        },
-      };
-
-      const html = buildSettingsPanel(mockWindow);
-
-      expect(html).toContain("<h2>");
-      expect(html).toContain("Settings");
-      expect(html).toContain("close-button");
-      expect(html).toContain("Default Search Engine");
-      expect(html).toContain('name="default-bang"');
-      expect(html).toContain("g!");
-      expect(html).toContain("checked");
-      expect(html).toContain("d!");
-    });
-
-    test("defaults to 'd' when no localStorage", () => {
-      const mockWindow = {
-        localStorage: null,
-      };
-
-      const html = buildSettingsPanel(mockWindow);
-
-      expect(html).toContain('value="d"');
-      expect(html).toContain("checked");
-    });
-  });
-
-  describe("handleDefaultBangChange", () => {
-    test("saves selection to localStorage", () => {
-      const mockStorage = {
-        setItem: jest.fn(),
-      };
-      const mockWindow = {
-        localStorage: mockStorage,
-        document: {
-          getElementById: jest.fn().mockReturnValue(null),
-        },
-      };
-      const mockEvent = {
-        target: {
-          name: "default-bang",
-          value: "g",
-        },
-      };
-
-      handleDefaultBangChange(mockEvent, mockWindow);
-
-      expect(mockStorage.setItem).toHaveBeenCalledWith("default-bang", "g");
-    });
-
-    test("does nothing for non-default-bang events", () => {
-      const mockStorage = {
-        setItem: jest.fn(),
-      };
-      const mockWindow = {
-        localStorage: mockStorage,
-      };
-      const mockEvent = {
-        target: {
-          name: "other-input",
-          value: "g",
-        },
-      };
-
-      handleDefaultBangChange(mockEvent, mockWindow);
-
-      expect(mockStorage.setItem).not.toHaveBeenCalled();
-    });
-
-    test("handles missing localStorage gracefully", () => {
-      const mockWindow = {
-        localStorage: null,
-      };
-      const mockEvent = {
-        target: {
-          name: "default-bang",
-          value: "g",
-        },
-      };
-
-      expect(() =>
-        handleDefaultBangChange(mockEvent, mockWindow),
-      ).not.toThrow();
-    });
-  });
-
   describe("showSaveMessage", () => {
     test("shows and hides save message", () => {
       let timeoutCallback;
@@ -808,72 +714,34 @@ describe("Settings Functions", () => {
     });
   });
 
-  describe("setupSettingsEventListeners", () => {
-    test("attaches event listeners when elements exist", () => {
-      const mockHamburger = {
-        addEventListener: jest.fn(),
-      };
-      const mockPanel = {
-        addEventListener: jest.fn(),
-      };
-      const mockWindow = {
-        document: {
-          querySelector: jest.fn((selector) => {
-            if (selector === ".hamburger-menu") return mockHamburger;
-            if (selector === ".settings-panel") return mockPanel;
-            return null;
-          }),
-        },
-      };
-
-      setupSettingsEventListeners(mockWindow);
-
-      expect(mockHamburger.addEventListener).toHaveBeenCalledWith(
-        "click",
-        expect.any(Function),
-      );
-      expect(mockPanel.addEventListener).toHaveBeenCalledWith(
-        "click",
-        expect.any(Function),
-      );
-      expect(mockPanel.addEventListener).toHaveBeenCalledWith(
-        "change",
-        expect.any(Function),
-      );
-    });
-
-    test("handles missing elements gracefully", () => {
-      const mockWindow = {
-        document: {
-          querySelector: jest.fn().mockReturnValue(null),
-        },
-      };
-
-      expect(() => setupSettingsEventListeners(mockWindow)).not.toThrow();
-    });
-  });
-
   describe("initializeSettings", () => {
     test("sets content and sets up listeners", () => {
-      const mockContent = {
+      const mockDialog = {
+        setWindow: jest.fn(),
         innerHTML: "",
       };
       const mockWindow = {
         document: {
           querySelector: jest.fn((selector) => {
-            if (selector === ".settings-content") return mockContent;
+            if (selector === "settings-dialog") return mockDialog;
             return null;
           }),
         },
         localStorage: {
           getItem: jest.fn().mockReturnValue("d"),
         },
+        customElements: {
+          define: jest.fn(),
+        },
       };
 
       initializeSettings(mockWindow);
 
-      expect(mockContent.innerHTML).toContain("Settings");
-      expect(mockContent.innerHTML).toContain("Default Search Engine");
+      expect(mockDialog.setWindow).toHaveBeenCalledWith(mockWindow);
+      expect(mockWindow.customElements.define).toHaveBeenCalledWith(
+        "settings-dialog",
+        expect.any(Function),
+      );
     });
 
     test("handles missing content element gracefully", () => {
