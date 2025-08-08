@@ -34,7 +34,7 @@ The `= window` default parameter makes the real browser object the default, allo
 ### Essential Commands
 ```bash
 make dev        # Starts Python HTTP server on port 8000. Don't run this. Ask me if you think it needs to be started
-make test       # Run Jest unit tests
+make test       # Run unit tests with Bun
 make format     # Auto-format code with Biome
 make lint       # Check linting with Biome
 make check      # Run both formatting and linting checks
@@ -43,10 +43,10 @@ make check      # Run both formatting and linting checks
 ### Running Specific Tests
 ```bash
 # Run single test file
-bunx jest tests/search.spec.js -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+bun test tests/search.spec.js
 
 # Run specific test pattern
-bunx jest -t "processBang" -c '{"testMatch":["**/tests/**/*.spec.js"]}'}
+bun test -t "processBang"
 ```
 
 ## Code Quality Tools
@@ -57,9 +57,9 @@ bunx jest -t "processBang" -c '{"testMatch":["**/tests/**/*.spec.js"]}'}
 - **GitHub Actions**: `code-quality.yml` workflow runs `biome check` and fails builds on issues
 
 ### Module System
-- **Browser**: Regular script tags (no ES6 modules due to Jest compatibility issues)
-- **Tests**: CommonJS require/module.exports
-- **No package.json**: By design - staying dependency-free except for Jest
+- **Browser**: Regular script tags (no ES6 modules for broader compatibility)
+- **Tests**: CommonJS require/module.exports (Bun supports both)
+- **Minimal package.json**: Basic metadata only, no external dependencies
 
 ## Bang System
 

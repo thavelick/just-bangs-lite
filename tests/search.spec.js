@@ -767,15 +767,8 @@ describe("Settings Functions", () => {
   });
 
   describe("showSaveMessage", () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
     test("shows and hides save message", () => {
+      let timeoutCallback;
       const mockMessage = {
         classList: {
           add: jest.fn(),
@@ -786,13 +779,19 @@ describe("Settings Functions", () => {
         document: {
           getElementById: jest.fn().mockReturnValue(mockMessage),
         },
+        setTimeout: jest.fn((callback, delay) => {
+          timeoutCallback = callback;
+          expect(delay).toBe(2000);
+        }),
       };
 
       showSaveMessage(mockWindow);
 
       expect(mockMessage.classList.add).toHaveBeenCalledWith("visible");
+      expect(mockWindow.setTimeout).toHaveBeenCalled();
 
-      jest.advanceTimersByTime(2000);
+      // Manually execute the timeout callback
+      timeoutCallback();
 
       expect(mockMessage.classList.remove).toHaveBeenCalledWith("visible");
     });
@@ -802,6 +801,7 @@ describe("Settings Functions", () => {
         document: {
           getElementById: jest.fn().mockReturnValue(null),
         },
+        setTimeout: jest.fn(),
       };
 
       expect(() => showSaveMessage(mockWindow)).not.toThrow();
