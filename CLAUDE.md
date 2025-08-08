@@ -127,3 +127,8 @@ Development caching behavior can be controlled via URL parameters:
 
 ### Implementation Planning Process
 When asked to plan an implementation, follow the standardized process documented in `PLANNING.md`.
+
+## Development Constraints
+
+### Server Management
+- Claude should never start or kill the dev server, the user handles that

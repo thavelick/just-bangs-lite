@@ -236,52 +236,6 @@ function toggleSettingsPanel(windowObj = window) {
   }
 }
 
-function buildSettingsPanel(windowObj = window) {
-  const currentDefault = getDefaultBang(windowObj);
-
-  let html = `
-    <div class="settings-header">
-      <h2>
-        Settings
-        <button class="close-button" type="button" aria-label="Close settings">×</button>
-      </h2>
-      <p class="save-message" id="save-message">✓ Changes saved automatically</p>
-    </div>
-    <div class="settings-body">
-      <h3>Default Search Engine</h3>
-      <div class="bang-list">
-  `;
-
-  const sortedBangs = Object.entries(bangs).sort(([a], [b]) =>
-    a.localeCompare(b),
-  );
-
-  for (const [bangKey, bangUrl] of sortedBangs) {
-    const isChecked = bangKey === currentDefault ? " checked" : "";
-    html += `
-      <div class="bang-trigger">${bangKey}!</div>
-      <div class="bang-url">${bangUrl}</div>
-      <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isChecked}>
-    `;
-  }
-
-  html += `
-      </div>
-    </div>
-  `;
-  return html;
-}
-
-function handleDefaultBangChange(event, windowObj = window) {
-  if (event.target.name === "default-bang") {
-    const storage = windowObj.localStorage;
-    if (storage) {
-      storage.setItem("default-bang", event.target.value);
-      showSaveMessage(windowObj);
-    }
-  }
-}
-
 function showSaveMessage(windowObj = window) {
   const saveMessage = windowObj.document.getElementById("save-message");
   if (saveMessage) {
@@ -289,34 +243,6 @@ function showSaveMessage(windowObj = window) {
     setTimeout(() => {
       saveMessage.classList.remove("visible");
     }, 2000);
-  }
-}
-
-function setupSettingsEventListeners(windowObj = window) {
-  const hamburgerButton = windowObj.document.querySelector(".hamburger-menu");
-  const settingsPanel = windowObj.document.querySelector(".settings-panel");
-
-  if (hamburgerButton) {
-    hamburgerButton.addEventListener("click", () =>
-      toggleSettingsPanel(windowObj),
-    );
-  }
-
-  if (settingsPanel) {
-    settingsPanel.addEventListener("click", (event) => {
-      // Close on backdrop click
-      if (event.target === settingsPanel) {
-        toggleSettingsPanel(windowObj);
-      }
-      // Close on close button click
-      if (event.target.classList.contains("close-button")) {
-        toggleSettingsPanel(windowObj);
-      }
-    });
-
-    settingsPanel.addEventListener("change", (event) => {
-      handleDefaultBangChange(event, windowObj);
-    });
   }
 }
 
@@ -343,7 +269,7 @@ const SettingsDialogBase =
 class SettingsDialog extends SettingsDialogBase {
   constructor() {
     super();
-    this.windowObj = window;
+    this.windowObj = typeof window !== "undefined" ? window : null;
   }
 
   setWindow(windowObj) {
@@ -417,7 +343,7 @@ const SettingOptionBase =
 class SettingOption extends SettingOptionBase {
   constructor() {
     super();
-    this.windowObj = window;
+    this.windowObj = typeof window !== "undefined" ? window : null;
   }
 
   setWindow(windowObj) {
@@ -484,7 +410,7 @@ const SaveMessageBase =
 class SaveMessage extends SaveMessageBase {
   constructor() {
     super();
-    this.windowObj = window;
+    this.windowObj = typeof window !== "undefined" ? window : null;
   }
 
   setWindow(windowObj) {
@@ -540,10 +466,7 @@ if (typeof module !== "undefined" && module.exports) {
     registerServiceWorker,
     initializePWA,
     toggleSettingsPanel,
-    buildSettingsPanel,
-    handleDefaultBangChange,
     showSaveMessage,
-    setupSettingsEventListeners,
     initializeSettings,
     shouldEnableCaching,
     SettingsDialog,

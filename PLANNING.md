@@ -53,7 +53,24 @@ Break implementation into phases with specific checkboxes:
 - **Phase 3** - Testing and documentation
 - **Phase 4** - Manual verification steps
 - **Phase 5** - Quality assurance (make check, make test, regression testing)
+- **Phase 6** - Dead code cleanup (for refactor projects only)
 
-### 6. Document Future Maintenance
+### 6. Dead Code Cleanup (Refactor Projects Only)
+For projects that replace existing functionality, always include a dead code cleanup phase:
+
+#### Identify Dead Code:
+- **Functions** - Old functions replaced by new implementation
+- **Exports** - Remove dead functions from `module.exports`
+- **Tests** - Remove tests for deleted functions
+- **Imports** - Remove dead imports from test files
+- **References** - Search codebase for any remaining references
+
+#### Verification Steps:
+- All tests should still pass with same or fewer test count
+- No linting or formatting errors
+- No broken imports or undefined function references
+- Functionality should work exactly the same as before cleanup
+
+### 7. Document Future Maintenance
 - Note any ongoing maintenance requirements
 - Explain any new concepts that future developers need to understand.
