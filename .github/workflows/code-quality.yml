@@ -13,13 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
 
       - name: Check code formatting and linting
-        run: npx @biomejs/biome check .
+        run: bunx --bun @biomejs/biome check .
 
-      - name: Run tests
-        run: npx jest -c '{"testMatch":["**/tests/**/*.spec.js"]}'
+      - name: Run unit tests
+        run: bun test tests/unit
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps
+
+      - name: Run integration tests
+        run: bunx playwright test tests/integration
