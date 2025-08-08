@@ -13,7 +13,7 @@ Just Bangs Lite is a client-side search tool with bang shortcuts (e.g., `python 
 - **`public_html/main.js`**: Simple entry point that ONLY calls `initialize()` - no additional code or functions
 - **`public_html/index.html`**: Loads both scripts sequentially (search.js then main.js)
 
-**IMPORTANT**: main.js exists solely to separate the function library (search.js) from execution for Jest compatibility. Adding any additional code or functions to main.js will break this separation and cause testing issues.
+**IMPORTANT**: main.js exists solely to separate the function library (search.js) from execution for test compatibility. Adding any additional code or functions to main.js will break this separation and cause testing issues.
 
 ### Dependency Injection Pattern
 Functions that use browser objects (like `window`) accept them as parameters for testability. Most commonly this is a `windowObj = window` parameter:
@@ -23,11 +23,13 @@ function someFunction(param, windowObj = window) { ... }
 
 The `= window` default parameter makes the real browser object the default, allowing seamless browser usage while enabling tests to pass mock objects.
 
-### Testing Without package.json
-- Uses Jest via `bunx jest` with custom configuration
+### Testing Without Dependencies
+- **Unit tests**: Uses Bun test runner via `bun test` - no package.json required
+- **Integration tests**: Uses Playwright via `bunx playwright test` for browser automation
 - CommonJS exports in search.js for Node.js compatibility: `module.exports = { ... }`
-- Test files in `tests/` directory with `.spec.js` extension
-- All functions tested with mock browser objects as needed
+- Unit test files in `tests/unit/` directory with `.spec.js` extension
+- Integration test files in `tests/integration/` directory with `.spec.js` extension
+- All unit tests use mock browser objects for isolation
 
 ## Development Commands
 
@@ -42,8 +44,17 @@ make check      # Run both formatting and linting checks
 
 ### Running Specific Tests
 ```bash
+# Run unit tests only
+make test-unit
+
+# Run integration tests only (requires dev server on port 8000)
+make test-integration
+
+# Run all tests
+make test-all
+
 # Run single test file
-bun test tests/search.spec.js
+bun test tests/unit/search.spec.js
 
 # Run specific test pattern
 bun test -t "processBang"
@@ -59,7 +70,7 @@ bun test -t "processBang"
 ### Module System
 - **Browser**: Regular script tags (no ES6 modules for broader compatibility)
 - **Tests**: CommonJS require/module.exports (Bun supports both)
-- **Minimal package.json**: Basic metadata only, no external dependencies
+- **No package.json**: Pure dependency-free JavaScript with external test runner
 
 ## Bang System
 
@@ -83,7 +94,7 @@ Modify the `bangs` array in `search.js`:
 Always pass mock browser objects to test functions that interact with DOM, location, or other browser APIs:
 ```javascript
 const mockWindow = {
-  document: { getElementById: jest.fn() },
+  document: { getElementById: () => {} },
   location: { search: "?q=test", href: "", hash: "" }
 };
 ```
