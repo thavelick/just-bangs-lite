@@ -361,9 +361,11 @@ class SettingOption extends SettingOptionBase {
     const isSelected = this.hasAttribute("selected");
 
     this.innerHTML = `
-      <div class="bang-trigger">${bangKey}!</div>
-      <div class="bang-url">${bangUrl}</div>
-      <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isSelected ? " checked" : ""}>
+      <div class="setting-row">
+        <div class="bang-trigger">${bangKey}!</div>
+        <div class="bang-url">${bangUrl}</div>
+        <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isSelected ? " checked" : ""}>
+      </div>
     `;
   }
 
