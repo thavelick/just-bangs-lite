@@ -24,7 +24,6 @@ const {
   registerServiceWorker,
   initializePWA,
   toggleSettingsPanel,
-  showSaveMessage,
   initializeSettings,
   shouldEnableCaching,
 } = require("../../public_html/search.js");
@@ -658,48 +657,6 @@ describe("Settings Functions", () => {
       };
 
       expect(() => toggleSettingsPanel(mockWindow)).not.toThrow();
-    });
-  });
-
-  describe("showSaveMessage", () => {
-    test("shows and hides save message", () => {
-      let timeoutCallback;
-      const mockMessage = {
-        classList: {
-          add: mock(),
-          remove: mock(),
-        },
-      };
-      const mockWindow = {
-        document: {
-          getElementById: mock().mockImplementation(() => mockMessage),
-        },
-        setTimeout: mock((callback, delay) => {
-          timeoutCallback = callback;
-          expect(delay).toBe(2000);
-        }),
-      };
-
-      showSaveMessage(mockWindow);
-
-      expect(mockMessage.classList.add).toHaveBeenCalledWith("visible");
-      expect(mockWindow.setTimeout).toHaveBeenCalled();
-
-      // Manually execute the timeout callback
-      timeoutCallback();
-
-      expect(mockMessage.classList.remove).toHaveBeenCalledWith("visible");
-    });
-
-    test("handles missing message element gracefully", () => {
-      const mockWindow = {
-        document: {
-          getElementById: mock().mockImplementation(() => null),
-        },
-        setTimeout: mock(),
-      };
-
-      expect(() => showSaveMessage(mockWindow)).not.toThrow();
     });
   });
 

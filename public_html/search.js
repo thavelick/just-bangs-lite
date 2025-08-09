@@ -299,16 +299,6 @@ function toggleSettingsPanel(windowObj = window) {
   }
 }
 
-function showSaveMessage(windowObj = window) {
-  const saveMessage = windowObj.document.getElementById("save-message");
-  if (saveMessage) {
-    saveMessage.classList.add("visible");
-    windowObj.setTimeout(() => {
-      saveMessage.classList.remove("visible");
-    }, 2000);
-  }
-}
-
 function initializeSettings(windowObj = window) {
   registerSettingsComponents(windowObj);
 
@@ -532,7 +522,6 @@ if (typeof module !== "undefined" && module.exports) {
     registerServiceWorker,
     initializePWA,
     toggleSettingsPanel,
-    showSaveMessage,
     initializeSettings,
     shouldEnableCaching,
     SettingsDialog,
