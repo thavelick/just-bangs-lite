@@ -19,10 +19,20 @@ test.describe("Settings Modal", () => {
     await expect(settingsPanel).toHaveAttribute("aria-hidden", "true");
   });
 
-  test("should save default search engine selection", async ({ page }) => {
+  test("should save default search engine selection and show URL tooltip on hover", async ({
+    page,
+  }) => {
     const hamburgerButton = page.locator(".hamburger-menu");
 
     await hamburgerButton.click();
+
+    // Test hover tooltip functionality
+    const githubDescription = page
+      .locator(".bang-description")
+      .filter({ hasText: "GitHub Search" });
+    await githubDescription.hover();
+    const titleAttribute = await githubDescription.getAttribute("title");
+    expect(titleAttribute).toContain("https://github.com/search?q={{{s}}}");
 
     const githubRadio = page.locator('input[name="default-bang"][value="gh"]');
     await githubRadio.click();
