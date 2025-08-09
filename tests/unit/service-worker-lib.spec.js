@@ -1,3 +1,13 @@
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  mock,
+  spyOn,
+  test,
+} from "bun:test";
+
 const {
   installHandler,
   activateHandler,
@@ -40,15 +50,15 @@ describe("Service Worker Library", () => {
 
     beforeEach(() => {
       mockCache = {
-        addAll: jest.fn().mockResolvedValue(undefined),
+        addAll: mock().mockResolvedValue(undefined),
       };
       mockCaches = {
-        open: jest.fn().mockResolvedValue(mockCache),
+        open: mock().mockResolvedValue(mockCache),
       };
       mockSelf = {
-        skipWaiting: jest.fn().mockResolvedValue(undefined),
+        skipWaiting: mock().mockResolvedValue(undefined),
       };
-      consoleSpy = jest.spyOn(console, "error").mockImplementation();
+      consoleSpy = spyOn(console, "error").mockImplementation(() => {});
     });
 
     afterEach(() => {
@@ -96,12 +106,12 @@ describe("Service Worker Library", () => {
 
     beforeEach(() => {
       mockCaches = {
-        keys: jest.fn(),
-        delete: jest.fn().mockResolvedValue(true),
+        keys: mock(),
+        delete: mock().mockResolvedValue(true),
       };
       mockSelf = {
         clients: {
-          claim: jest.fn().mockResolvedValue(undefined),
+          claim: mock().mockResolvedValue(undefined),
         },
       };
     });
