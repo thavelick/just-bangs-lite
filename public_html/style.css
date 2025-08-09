@@ -278,21 +278,29 @@ html.dark-mode .close-button:hover {
 }
 
 .save-message {
-  color: #64bb45;
+  color: #2d5016;
   font-size: 14px;
   margin: 0;
-  visibility: hidden;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 8px 12px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .save-message.visible {
-  visibility: visible;
   opacity: 1;
 }
 
 html.dark-mode .save-message {
-  color: #7fd95f;
+  color: #a3d977;
+  background-color: #2d4f1a;
+  border-color: #4a6b3a;
 }
 
 /* Settings body */
