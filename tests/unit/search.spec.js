@@ -1,3 +1,13 @@
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  mock,
+  spyOn,
+  test,
+} from "bun:test";
+
 const {
   getQueryParam,
   processBang,
@@ -34,39 +44,24 @@ describe("buildSearchUrl", () => {
 });
 
 describe("getQueryParam", () => {
-  const originalLocation = global.window?.location;
-
-  beforeEach(() => {
-    global.window = undefined;
-    global.window = {
-      location: {
-        search: "",
-      },
-    };
-  });
-
-  afterEach(() => {
-    global.window = originalLocation;
-  });
-
   test("returns null for missing parameter", () => {
-    global.window.location.search = "?foo=bar";
-    expect(getQueryParam("missing")).toBeNull();
+    const mockWindow = { location: { search: "?foo=bar" } };
+    expect(getQueryParam("missing", mockWindow)).toBeNull();
   });
 
   test("returns value for existing parameter", () => {
-    global.window.location.search = "?q=test+query";
-    expect(getQueryParam("q")).toBe("test query");
+    const mockWindow = { location: { search: "?q=test+query" } };
+    expect(getQueryParam("q", mockWindow)).toBe("test query");
   });
 
   test("handles empty search string", () => {
-    global.window.location.search = "";
-    expect(getQueryParam("q")).toBeNull();
+    const mockWindow = { location: { search: "" } };
+    expect(getQueryParam("q", mockWindow)).toBeNull();
   });
 
   test("returns empty string for empty query parameter", () => {
-    global.window.location.search = "?q=";
-    expect(getQueryParam("q")).toBe("");
+    const mockWindow = { location: { search: "?q=" } };
+    expect(getQueryParam("q", mockWindow)).toBe("");
   });
 });
 
@@ -202,15 +197,15 @@ describe("setupUI", () => {
   beforeEach(() => {
     mockSearchInput = {
       value: "",
-      addEventListener: jest.fn(),
+      addEventListener: mock(),
     };
 
     mockSearchButton = {
-      addEventListener: jest.fn(),
+      addEventListener: mock(),
     };
 
     const mockDocument = {
-      getElementById: jest.fn((id) => {
+      getElementById: mock((id) => {
         if (id === "searchInput") return mockSearchInput;
         if (id === "searchButton") return mockSearchButton;
         return null;
@@ -260,7 +255,7 @@ describe("initialize", () => {
 
   beforeEach(() => {
     mockDocument = {
-      addEventListener: jest.fn(),
+      addEventListener: mock(),
     };
 
     mockWindow = {
@@ -325,79 +320,74 @@ describe("toggleDarkMode", () => {
   beforeEach(() => {
     mockHTML = {
       classList: {
-        contains: jest.fn(),
-        remove: jest.fn(),
-        add: jest.fn(),
+        contains: mock(),
+        remove: mock(),
+        add: mock(),
       },
     };
-
-    global.document = {
-      documentElement: mockHTML,
-    };
-  });
-
-  afterEach(() => {
-    global.document = undefined;
   });
 
   test("switches from dark-mode to light-mode", () => {
-    mockHTML.classList.contains.mockReturnValue(true);
+    mockHTML.classList.contains.mockImplementation(() => true);
 
-    toggleDarkMode();
+    toggleDarkMode({ document: { documentElement: mockHTML } });
 
     expect(mockHTML.classList.remove).toHaveBeenCalledWith("dark-mode");
     expect(mockHTML.classList.add).toHaveBeenCalledWith("light-mode");
   });
 
   test("switches from light-mode to dark-mode", () => {
-    mockHTML.classList.contains.mockReturnValue(false);
+    mockHTML.classList.contains.mockImplementation(() => false);
 
-    toggleDarkMode();
+    toggleDarkMode({ document: { documentElement: mockHTML } });
 
     expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
     expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
   });
 
   test("switches from no class to dark-mode", () => {
-    mockHTML.classList.contains.mockReturnValue(false);
+    mockHTML.classList.contains.mockImplementation(() => false);
 
-    toggleDarkMode();
+    toggleDarkMode({ document: { documentElement: mockHTML } });
 
     expect(mockHTML.classList.remove).toHaveBeenCalledWith("light-mode");
     expect(mockHTML.classList.add).toHaveBeenCalledWith("dark-mode");
   });
 
   test("saves dark mode preference to localStorage", () => {
-    const mockStorage = { setItem: jest.fn() };
-    global.window = { localStorage: mockStorage };
-    mockHTML.classList.contains.mockReturnValue(false);
+    const mockStorage = { setItem: mock() };
+    const mockWindow = {
+      document: { documentElement: mockHTML },
+      localStorage: mockStorage,
+    };
+    mockHTML.classList.contains.mockImplementation(() => false);
 
-    toggleDarkMode();
+    toggleDarkMode(mockWindow);
 
     expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "dark");
-
-    global.window = undefined;
   });
 
   test("saves light mode preference to localStorage", () => {
-    const mockStorage = { setItem: jest.fn() };
-    global.window = { localStorage: mockStorage };
-    mockHTML.classList.contains.mockReturnValue(true);
+    const mockStorage = { setItem: mock() };
+    const mockWindow = {
+      document: { documentElement: mockHTML },
+      localStorage: mockStorage,
+    };
+    mockHTML.classList.contains.mockImplementation(() => true);
 
-    toggleDarkMode();
+    toggleDarkMode(mockWindow);
 
     expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "light");
-
-    global.window = undefined;
   });
 
   test("handles missing localStorage gracefully", () => {
-    global.window = {};
-    mockHTML.classList.contains.mockReturnValue(false);
+    const mockWindow = {
+      document: { documentElement: mockHTML },
+      // no localStorage
+    };
+    mockHTML.classList.contains.mockImplementation(() => false);
 
-    expect(() => toggleDarkMode()).not.toThrow();
-
-    global.window = undefined;
+    expect(() => toggleDarkMode(mockWindow)).not.toThrow();
   });
 });
 
@@ -409,20 +399,20 @@ describe("initializeDarkModeToggle", () => {
   beforeEach(() => {
     mockHTML = {
       classList: {
-        add: jest.fn(),
+        add: mock(),
       },
     };
 
     mockToggleButton = {
-      addEventListener: jest.fn(),
+      addEventListener: mock(),
     };
 
     mockWindow = {
       document: {
         documentElement: mockHTML,
-        querySelector: jest.fn().mockReturnValue(mockToggleButton),
+        querySelector: mock().mockImplementation(() => mockToggleButton),
       },
-      matchMedia: jest.fn(),
+      matchMedia: mock(),
     };
   });
 
@@ -433,7 +423,9 @@ describe("initializeDarkModeToggle", () => {
     "when system prefers dark=%s, adds %s class and sets up event handler",
     (prefersDark, expectedClass) => {
       mockWindow.localStorage = null;
-      mockWindow.matchMedia.mockReturnValue({ matches: prefersDark });
+      mockWindow.matchMedia.mockImplementation(() => ({
+        matches: prefersDark,
+      }));
 
       initializeDarkModeToggle(mockWindow);
 
@@ -446,7 +438,7 @@ describe("initializeDarkModeToggle", () => {
       );
       expect(mockToggleButton.addEventListener).toHaveBeenCalledWith(
         "click",
-        toggleDarkMode,
+        expect.any(Function),
       );
     },
   );
@@ -458,9 +450,9 @@ describe("initializeDarkModeToggle", () => {
     "when localStorage has saved preference '%s', uses that over system preference",
     (savedMode, expectedClass) => {
       mockWindow.localStorage = {
-        getItem: jest.fn().mockReturnValue(savedMode),
+        getItem: mock().mockImplementation(() => savedMode),
       };
-      mockWindow.matchMedia.mockReturnValue({ matches: false });
+      mockWindow.matchMedia.mockImplementation(() => ({ matches: false }));
 
       initializeDarkModeToggle(mockWindow);
 
@@ -470,8 +462,8 @@ describe("initializeDarkModeToggle", () => {
   );
 
   test("handles missing toggle button gracefully", () => {
-    mockWindow.matchMedia.mockReturnValue({ matches: false });
-    mockWindow.document.querySelector.mockReturnValue(null);
+    mockWindow.matchMedia.mockImplementation(() => ({ matches: false }));
+    mockWindow.document.querySelector.mockImplementation(() => null);
 
     expect(() => initializeDarkModeToggle(mockWindow)).not.toThrow();
     expect(mockWindow.document.querySelector).toHaveBeenCalledWith(
@@ -484,7 +476,7 @@ describe("initializeContentPage", () => {
   test("adds DOMContentLoaded event listener", () => {
     const mockWindow = {
       document: {
-        addEventListener: jest.fn(),
+        addEventListener: mock(),
       },
     };
 
@@ -526,8 +518,8 @@ describe("PWA Functions", () => {
 
     beforeEach(() => {
       consoleSpy = {
-        log: jest.spyOn(console, "log").mockImplementation(),
-        error: jest.spyOn(console, "error").mockImplementation(),
+        log: spyOn(console, "log").mockImplementation(() => {}),
+        error: spyOn(console, "error").mockImplementation(() => {}),
       };
     });
 
@@ -549,7 +541,7 @@ describe("PWA Functions", () => {
 
     test("registers service worker successfully", async () => {
       const mockRegistration = { scope: "/" };
-      const mockRegister = jest.fn().mockResolvedValue(mockRegistration);
+      const mockRegister = mock().mockResolvedValue(mockRegistration);
       const mockWindow = {
         navigator: {
           serviceWorker: {
@@ -569,7 +561,7 @@ describe("PWA Functions", () => {
 
     test("handles service worker registration failure", async () => {
       const mockError = new Error("Registration failed");
-      const mockRegister = jest.fn().mockRejectedValue(mockError);
+      const mockRegister = mock().mockRejectedValue(mockError);
       const mockWindow = {
         navigator: {
           serviceWorker: {
@@ -590,7 +582,7 @@ describe("PWA Functions", () => {
 
   describe("initializePWA", () => {
     test("calls registerServiceWorker when service worker is supported", () => {
-      const mockRegister = jest.fn().mockResolvedValue({});
+      const mockRegister = mock().mockResolvedValue({});
       const mockWindow = {
         navigator: {
           serviceWorker: {
@@ -622,12 +614,12 @@ describe("Settings Functions", () => {
   describe("toggleSettingsPanel", () => {
     test("shows panel when hidden", () => {
       const mockPanel = {
-        getAttribute: jest.fn().mockReturnValue("true"),
-        setAttribute: jest.fn(),
+        getAttribute: mock().mockImplementation(() => "true"),
+        setAttribute: mock(),
       };
       const mockWindow = {
         document: {
-          querySelector: jest.fn().mockReturnValue(mockPanel),
+          querySelector: mock().mockImplementation(() => mockPanel),
         },
       };
 
@@ -641,12 +633,12 @@ describe("Settings Functions", () => {
 
     test("hides panel when visible", () => {
       const mockPanel = {
-        getAttribute: jest.fn().mockReturnValue("false"),
-        setAttribute: jest.fn(),
+        getAttribute: mock().mockImplementation(() => "false"),
+        setAttribute: mock(),
       };
       const mockWindow = {
         document: {
-          querySelector: jest.fn().mockReturnValue(mockPanel),
+          querySelector: mock().mockImplementation(() => mockPanel),
         },
       };
 
@@ -661,7 +653,7 @@ describe("Settings Functions", () => {
     test("does nothing when panel not found", () => {
       const mockWindow = {
         document: {
-          querySelector: jest.fn().mockReturnValue(null),
+          querySelector: mock().mockImplementation(() => null),
         },
       };
 
@@ -674,15 +666,15 @@ describe("Settings Functions", () => {
       let timeoutCallback;
       const mockMessage = {
         classList: {
-          add: jest.fn(),
-          remove: jest.fn(),
+          add: mock(),
+          remove: mock(),
         },
       };
       const mockWindow = {
         document: {
-          getElementById: jest.fn().mockReturnValue(mockMessage),
+          getElementById: mock().mockImplementation(() => mockMessage),
         },
-        setTimeout: jest.fn((callback, delay) => {
+        setTimeout: mock((callback, delay) => {
           timeoutCallback = callback;
           expect(delay).toBe(2000);
         }),
@@ -702,9 +694,9 @@ describe("Settings Functions", () => {
     test("handles missing message element gracefully", () => {
       const mockWindow = {
         document: {
-          getElementById: jest.fn().mockReturnValue(null),
+          getElementById: mock().mockImplementation(() => null),
         },
-        setTimeout: jest.fn(),
+        setTimeout: mock(),
       };
 
       expect(() => showSaveMessage(mockWindow)).not.toThrow();
@@ -714,21 +706,21 @@ describe("Settings Functions", () => {
   describe("initializeSettings", () => {
     test("sets content and sets up listeners", () => {
       const mockDialog = {
-        setWindow: jest.fn(),
+        setWindow: mock(),
         innerHTML: "",
       };
       const mockWindow = {
         document: {
-          querySelector: jest.fn((selector) => {
+          querySelector: mock((selector) => {
             if (selector === "settings-dialog") return mockDialog;
             return null;
           }),
         },
         localStorage: {
-          getItem: jest.fn().mockReturnValue("d"),
+          getItem: mock().mockImplementation(() => "d"),
         },
         customElements: {
-          define: jest.fn(),
+          define: mock(),
         },
       };
 
@@ -744,7 +736,7 @@ describe("Settings Functions", () => {
     test("handles missing content element gracefully", () => {
       const mockWindow = {
         document: {
-          querySelector: jest.fn().mockReturnValue(null),
+          querySelector: mock().mockImplementation(() => null),
         },
       };
 

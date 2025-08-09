@@ -186,9 +186,9 @@ function setupUI(windowObj = window) {
   }
 }
 
-function toggleDarkMode() {
-  const html = document.documentElement;
-  const storage = typeof window !== "undefined" ? window.localStorage : null;
+function toggleDarkMode(windowObj = window) {
+  const html = windowObj.document.documentElement;
+  const storage = windowObj?.localStorage ?? null;
 
   if (html.classList.contains("dark-mode")) {
     html.classList.remove("dark-mode");
@@ -241,7 +241,7 @@ function initializeDarkModeToggle(windowObj = window) {
   const toggleButton = windowObj.document.querySelector(".dark-mode-toggle");
   if (!toggleButton) return;
 
-  toggleButton.addEventListener("click", toggleDarkMode);
+  toggleButton.addEventListener("click", () => toggleDarkMode(windowObj));
 }
 
 function isServiceWorkerSupported(windowObj = window) {
