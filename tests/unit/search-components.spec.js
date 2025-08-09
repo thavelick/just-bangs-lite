@@ -1,4 +1,4 @@
-import { describe, expect, test, mock, beforeAll } from "bun:test";
+import { beforeAll, describe, expect, mock, test } from "bun:test";
 
 const {
   SaveMessage,
@@ -29,20 +29,20 @@ describe("Web Components", () => {
       document.body.innerHTML = "<settings-dialog></settings-dialog>";
 
       const settingsDialog = document.querySelector("settings-dialog");
-      
+
       const header = settingsDialog?.querySelector(".settings-header");
       expect(header).toBeTruthy();
-      
+
       const closeButton = settingsDialog?.querySelector(".close-button");
       expect(closeButton).toBeTruthy();
       expect(closeButton?.textContent).toBe("×");
-      
+
       const saveMessage = settingsDialog?.querySelector("save-message");
       expect(saveMessage).toBeTruthy();
-      
+
       const body = settingsDialog?.querySelector(".settings-body");
       expect(body).toBeTruthy();
-      
+
       const bangList = settingsDialog?.querySelector(".bang-list");
       expect(bangList).toBeTruthy();
     });
@@ -65,15 +65,17 @@ describe("Web Components", () => {
       settingsDialog.setWindow(mockWindow);
       settingsDialog.render();
 
-      const googleOption = settingsDialog.querySelector('setting-option[bang-key="g"]');
+      const googleOption = settingsDialog.querySelector(
+        'setting-option[bang-key="g"]',
+      );
       expect(googleOption).toBeTruthy();
-      
+
       googleOption.setWindow(mockWindow);
       googleOption.connectedCallback(); // Manually trigger render
-      
+
       const googleRadio = googleOption.querySelector('input[value="g"]');
       expect(googleRadio).toBeTruthy();
-      
+
       googleRadio.checked = true;
       googleRadio.dispatchEvent(new Event("change", { bubbles: true }));
 
@@ -98,7 +100,9 @@ describe("Web Components", () => {
       const bangDescription = settingOption.querySelector(".bang-description");
       expect(bangDescription).toBeTruthy();
       expect(bangDescription.textContent).toBe("Google Search");
-      expect(bangDescription.title).toBe("https://www.google.com/search?q={{{s}}}");
+      expect(bangDescription.title).toBe(
+        "https://www.google.com/search?q={{{s}}}",
+      );
 
       const radio = settingOption.querySelector('input[type="radio"]');
       expect(radio).toBeTruthy();
