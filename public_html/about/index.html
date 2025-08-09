@@ -40,8 +40,8 @@
           <p>Runs entirely in your browser with zero server dependencies. No data ever leaves your device.</p>
         </div>
         <div class="feature-item">
-          <h3>Dependency-Free</h3>
-          <p>Pure HTML, CSS, and JavaScript. No frameworks, no build steps, no package.json.</p>
+          <h3>No Production Dependencies</h3>
+          <p>Pure HTML, CSS, and JavaScript runtime. Build tools (Biome) only for development.</p>
         </div>
         <div class="feature-item">
           <h3>Smart Dark Mode</h3>
@@ -95,7 +95,7 @@
             </tr>
             <tr>
               <td><strong>Dependencies</strong></td>
-              <td>None (pure HTML/JS/CSS)</td>
+              <td>Runtime: None<br>Dev: Biome (linting)</td>
               <td>Python 3.10</td>
               <td>TypeScript, Vite, vite-plugin-pwa</td>
               <td>N/A (hosted service)</td>
@@ -206,15 +206,18 @@
         </div>
         
         <div class="timeline-item">
-          <div class="timeline-date">Just Bangs Lite (July 2025)</div>
+          <div class="timeline-date">Just Bangs Lite (July-August 2025)</div>
           <ul>
             <li><strong>July 18, 2025:</strong> Completed rewrite as client-side JavaScript application</li>
             <li><strong>July 18, 2025:</strong> Added modular architecture with dependency injection for testing</li>
-            <li><strong>July 18, 2025:</strong> Implemented Jest unit testing without package.json</li>
+            <li><strong>July 18, 2025:</strong> Implemented unit testing with modular test structure</li>
             <li><strong>July 18, 2025:</strong> Added Biome for formatting/linting and GitHub Actions CI/CD</li>
             <li><strong>July 20, 2025:</strong> Added PWA features with service worker and environment-aware caching</li>
             <li><strong>July 20, 2025:</strong> Implemented settings panel with hamburger menu and configurable default bang</li>
             <li><strong>July 20, 2025:</strong> Added mobile responsiveness and responsive design</li>
+            <li><strong>August 2025:</strong> Enhanced settings UI with alternating row colors and descriptive bang names</li>
+            <li><strong>August 2025:</strong> Implemented automated cache busting system for PWA deployments</li>
+            <li><strong>August 2025:</strong> Added floating save notifications and hover tooltips</li>
           </ul>
         </div>
       </div>
@@ -233,7 +236,7 @@
           <strong>How to Contribute:</strong><br>
           • Fork the repository and create a feature branch<br>
           • Make your changes and add tests if applicable<br>
-          • Run <code>make check</code> and <code>make test</code> to verify your changes<br>
+          • Run <code>make check</code> and <code>make test-all</code> to verify your changes<br>
           • Submit a pull request with a clear description of your changes
         </p>
       </div>
