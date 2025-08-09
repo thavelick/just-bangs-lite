@@ -360,8 +360,18 @@ html.dark-mode .bang-trigger {
   hyphens: auto;
 }
 
+.bang-description {
+  font-size: 14px;
+  color: #555;
+  cursor: help;
+}
+
 html.dark-mode .bang-url {
   color: #ccc;
+}
+
+html.dark-mode .bang-description {
+  color: #ddd;
 }
 
 .bang-radio {

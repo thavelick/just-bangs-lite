@@ -1,27 +1,90 @@
 const DEFAULT_BANG = "d";
 
 const bangs = {
-  al: "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}",
-  cl: "https://denver.craigslist.org/search/?query={{{s}}}",
-  d: "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en",
-  e: "https://www.ebay.com/sch/i.html?_nkw={{{s}}}&rt=nc&LH_ItemCondition=4",
-  jw: "https://www.justwatch.com/us/search?q={{{s}}}",
-  k: "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}",
-  m: "https://search.marginalia.nu/search?query={{{s}}}",
-  py: "https://kiwix.tristanhavelick.com/search?content=python-3.10.2&pattern={{{s}}}",
-  sg: "https://app.thestorygraph.com/browse?search_term={{{s}}}",
-  ytt: "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}",
-  x: "https://searxng.tristanhavelick.com/search?q={{{s}}}",
-  gh: "https://github.com/search?q={{{s}}}",
-  ghr: "https://github.com/{{{s}}}",
-  wb: "https://web.archive.org/web/{{{s}}}",
-  g: "https://www.google.com/search?q={{{s}}}",
-  ddg: "https://duckduckgo.com/?q={{{s}}}",
-  a: "https://www.amazon.com/s?k={{{s}}}",
-  pypi: "https://pypi.org/search/?q={{{s}}}",
-  w: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
-  i: "https://duckduckgo.com/?q={{{s}}}&iax=images&ia=images",
-  yt: "https://www.youtube.com/results?search_query={{{s}}}",
+  al: {
+    url: "https://kiwix.tristanhavelick.com/search?content=archlinux_en_all_nopic_2022-05&pattern={{{s}}}",
+    description: "ArchLinux Wiki",
+  },
+  cl: {
+    url: "https://denver.craigslist.org/search/?query={{{s}}}",
+    description: "Denver Craigslist",
+  },
+  d: {
+    url: "https://lite.duckduckgo.com/lite?q={{{s}}}&kl=us-en",
+    description: "DuckDuckGo Lite",
+  },
+  e: {
+    url: "https://www.ebay.com/sch/i.html?_nkw={{{s}}}&rt=nc&LH_ItemCondition=4",
+    description: "eBay (used items)",
+  },
+  jw: {
+    url: "https://www.justwatch.com/us/search?q={{{s}}}",
+    description: "JustWatch (streaming search)",
+  },
+  k: {
+    url: "https://kiwix.tristanhavelick.com/search?pattern={{{s}}}",
+    description: "Kiwix Offline Content",
+  },
+  m: {
+    url: "https://search.marginalia.nu/search?query={{{s}}}",
+    description: "Marginalia Search",
+  },
+  py: {
+    url: "https://kiwix.tristanhavelick.com/search?content=python-3.10.2&pattern={{{s}}}",
+    description: "Python Documentation",
+  },
+  sg: {
+    url: "https://app.thestorygraph.com/browse?search_term={{{s}}}",
+    description: "The StoryGraph (books)",
+  },
+  ytt: {
+    url: "https://youtranscript.tristanhavelick.com/search?search_term={{{s}}}",
+    description: "YouTube Transcript Search",
+  },
+  x: {
+    url: "https://searxng.tristanhavelick.com/search?q={{{s}}}",
+    description: "SearXNG",
+  },
+  gh: {
+    url: "https://github.com/search?q={{{s}}}",
+    description: "GitHub Search",
+  },
+  ghr: {
+    url: "https://github.com/{{{s}}}",
+    description: "GitHub Repository",
+  },
+  wb: {
+    url: "https://web.archive.org/web/{{{s}}}",
+    description: "Wayback Machine",
+  },
+  g: {
+    url: "https://www.google.com/search?q={{{s}}}",
+    description: "Google Search",
+  },
+  ddg: {
+    url: "https://duckduckgo.com/?q={{{s}}}",
+    description: "DuckDuckGo",
+  },
+  a: {
+    url: "https://www.amazon.com/s?k={{{s}}}",
+    description: "Amazon",
+  },
+  pypi: {
+    url: "https://pypi.org/search/?q={{{s}}}",
+    description: "Python Package Index",
+  },
+  w: {
+    url: "https://en.wikipedia.org/wiki/Special:Search?search={{{s}}}",
+    description: "Wikipedia",
+  },
+  i: {
+    url: "https://duckduckgo.com/?q={{{s}}}&iax=images&ia=images",
+    description: "DuckDuckGo Images",
+  },
+  yt: {
+    url: "https://www.youtube.com/results?search_query={{{s}}}",
+    description: "YouTube",
+  },
 };
 
 function buildSearchUrl(urlTemplate, searchTerm) {
@@ -39,7 +102,7 @@ function getDefaultBang(windowObj = window) {
 
 function buildFallbackUrl(searchTerm, windowObj = window) {
   const defaultBang = getDefaultBang(windowObj);
-  const bangUrl = bangs[defaultBang];
+  const bangUrl = bangs[defaultBang].url;
   return buildSearchUrl(bangUrl, searchTerm);
 }
 
@@ -59,9 +122,9 @@ function processBang(query, windowObj = window) {
     const bangTag = trimmed.substring(1, spaceIndex);
     const searchTerm = trimmed.substring(spaceIndex + 1).trim();
 
-    const bangUrl = bangs[bangTag];
-    if (bangUrl) {
-      return buildSearchUrl(bangUrl, searchTerm);
+    const bang = bangs[bangTag];
+    if (bang) {
+      return buildSearchUrl(bang.url, searchTerm);
     }
   }
   const bangMatch = trimmed.match(/^(.+)\s+(\w+)!$/);
@@ -69,9 +132,9 @@ function processBang(query, windowObj = window) {
     const searchTerm = bangMatch[1].trim();
     const bangTag = bangMatch[2];
 
-    const bangUrl = bangs[bangTag];
-    if (bangUrl) {
-      return buildSearchUrl(bangUrl, searchTerm);
+    const bang = bangs[bangTag];
+    if (bang) {
+      return buildSearchUrl(bang.url, searchTerm);
     }
   }
   return buildFallbackUrl(trimmed, windowObj);
@@ -300,9 +363,9 @@ class SettingsDialog extends SettingsDialogBase {
         <div class="bang-list">
     `;
 
-    for (const [bangKey, bangUrl] of sortedBangs) {
+    for (const [bangKey, bangData] of sortedBangs) {
       const isSelected = bangKey === currentDefault;
-      html += `<setting-option bang-key="${bangKey}" bang-url="${bangUrl}"${isSelected ? " selected" : ""}></setting-option>`;
+      html += `<setting-option bang-key="${bangKey}" bang-url="${bangData.url}" bang-description="${bangData.description}"${isSelected ? " selected" : ""}></setting-option>`;
     }
 
     html += `
@@ -358,12 +421,13 @@ class SettingOption extends SettingOptionBase {
   render() {
     const bangKey = this.getAttribute("bang-key");
     const bangUrl = this.getAttribute("bang-url");
+    const bangDescription = this.getAttribute("bang-description");
     const isSelected = this.hasAttribute("selected");
 
     this.innerHTML = `
       <div class="setting-row">
         <div class="bang-trigger">${bangKey}!</div>
-        <div class="bang-url">${bangUrl}</div>
+        <div class="bang-description" title="${bangUrl}">${bangDescription}</div>
         <input type="radio" name="default-bang" value="${bangKey}" class="bang-radio"${isSelected ? " checked" : ""}>
       </div>
     `;
