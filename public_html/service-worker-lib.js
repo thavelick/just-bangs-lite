@@ -1,4 +1,4 @@
-const STATIC_CACHE_NAME = "just-bangs-static-v11";
+const STATIC_CACHE_NAME = "just-bangs-static-CACHE_BUST_VALUE";
 
 const STATIC_ASSETS = [
   "./",

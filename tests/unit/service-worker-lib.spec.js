@@ -8,8 +8,12 @@ const {
 describe("Service Worker Library", () => {
   describe("constants", () => {
     test("STATIC_CACHE_NAME follows naming convention", () => {
-      expect(STATIC_CACHE_NAME).toMatch(/^just-bangs-static-v\d+$/);
+      expect(STATIC_CACHE_NAME).toMatch(/^just-bangs-static-/);
       expect(STATIC_CACHE_NAME).toBeTruthy();
+      // Allow both placeholder and actual values
+      expect(STATIC_CACHE_NAME).toMatch(
+        /^just-bangs-static-(CACHE_BUST_VALUE|\d+-[a-z0-9]+)$/,
+      );
     });
 
     test("STATIC_ASSETS includes all required files", () => {

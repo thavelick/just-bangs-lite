@@ -46,6 +46,7 @@ test-all: # Run both unit and integration tests
 	@echo "Running integration tests.."
 	bunx playwright test tests/integration
 
+
 # -----------------------------------------------------------
 # CAUTION: If you have a file with the same name as make
 # command, you need to add it to .PHONY below, otherwise it

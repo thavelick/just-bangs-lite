@@ -102,7 +102,9 @@ const mockWindow = {
 ## Progressive Web App (PWA)
 
 ### Cache Versioning
-Service worker uses versioned static cache (`just-bangs-static-v1`). Increment version numbers (v1→v2) when static assets change or need to force cache refresh.
+Service worker uses a placeholder `CACHE_BUST_VALUE` in development. During CI deployment, GitHub Actions automatically runs `scripts/cache-bust.sh` to replace this with a random timestamp-based version (e.g., `1754699500-abc123`). This automatically invalidates browser caches without any manual intervention. 
+
+**Note**: This is handled automatically by GitHub Actions during deployment - no local intervention needed.
 
 ## Development Workflow
 
