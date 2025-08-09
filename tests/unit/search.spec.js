@@ -37,7 +37,7 @@ describe("getQueryParam", () => {
   const originalLocation = global.window?.location;
 
   beforeEach(() => {
-    delete global.window;
+    global.window = undefined;
     global.window = {
       location: {
         search: "",
@@ -118,10 +118,7 @@ describe("processBang", () => {
   test("truncates extremely long queries to 2000 characters", () => {
     const longQuery = "a".repeat(2500);
     const result = processBang(longQuery, mockWindow);
-    const expected =
-      "https://lite.duckduckgo.com/lite?q=" +
-      encodeURIComponent("a".repeat(2000)) +
-      "&kl=us-en";
+    const expected = `https://lite.duckduckgo.com/lite?q=${encodeURIComponent("a".repeat(2000))}&kl=us-en`;
     expect(result).toBe(expected);
   });
 });
@@ -340,7 +337,7 @@ describe("toggleDarkMode", () => {
   });
 
   afterEach(() => {
-    delete global.document;
+    global.document = undefined;
   });
 
   test("switches from dark-mode to light-mode", () => {
@@ -379,7 +376,7 @@ describe("toggleDarkMode", () => {
 
     expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "dark");
 
-    delete global.window;
+    global.window = undefined;
   });
 
   test("saves light mode preference to localStorage", () => {
@@ -391,7 +388,7 @@ describe("toggleDarkMode", () => {
 
     expect(mockStorage.setItem).toHaveBeenCalledWith("darkMode", "light");
 
-    delete global.window;
+    global.window = undefined;
   });
 
   test("handles missing localStorage gracefully", () => {
@@ -400,7 +397,7 @@ describe("toggleDarkMode", () => {
 
     expect(() => toggleDarkMode()).not.toThrow();
 
-    delete global.window;
+    global.window = undefined;
   });
 });
 

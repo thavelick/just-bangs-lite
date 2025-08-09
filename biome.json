@@ -2,7 +2,7 @@
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2,
-    "includes": [
+    "include": [
       "public_html/**",
       "tests/**",
       "*.js",
@@ -11,7 +11,7 @@
     ]
   },
   "linter": {
-    "includes": [
+    "include": [
       "public_html/**",
       "tests/**",
       "*.js",

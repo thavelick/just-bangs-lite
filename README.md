@@ -92,11 +92,13 @@ Configure your default search engine via the hamburger menu (☰) in the top-lef
 ### Build Commands
 
 ```bash
-make dev     # Start development server on port 8000
-make test    # Run unit tests
-make format  # Auto-format code
-make lint    # Check code style
-make check   # Run formatting and linting checks
+make dev               # Start development server on port 8000
+make test-unit         # Run unit tests  
+make test-integration  # Run integration tests (starts server automatically)
+make test-all         # Run all tests (unit + integration)
+make format           # Auto-format code
+make lint             # Check code style  
+make check            # Run formatting and linting checks
 ```
 
 **Development Requirements:**

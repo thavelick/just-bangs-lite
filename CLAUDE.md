@@ -24,8 +24,8 @@ function someFunction(param, windowObj = window) { ... }
 The `= window` default parameter makes the real browser object the default, allowing seamless browser usage while enabling tests to pass mock objects.
 
 ### Testing Without Dependencies
-- **Unit tests**: Uses Bun test runner via `bun test` - no package.json required
-- **Integration tests**: Uses Playwright via `bunx playwright test` for browser automation
+- **Unit tests**: Uses Bun test runner via `bun run test:unit` 
+- **Integration tests**: Uses Playwright via `bun run test:integration` for browser automation
 - CommonJS exports in search.js for Node.js compatibility: `module.exports = { ... }`
 - Unit test files in `tests/unit/` directory with `.spec.js` extension
 - Integration test files in `tests/integration/` directory with `.spec.js` extension
@@ -35,8 +35,8 @@ The `= window` default parameter makes the real browser object the default, allo
 
 ### Essential Commands
 ```bash
-make dev        # Starts Python HTTP server on port 8000. Don't run this. Ask me if you think it needs to be started
-make test       # Run unit tests with Bun
+make dev        # Starts Python HTTP server on port 8000. Claude shouldn't run this - user handles dev server
+make test-unit  # Run unit tests with Bun
 make format     # Auto-format code with Biome
 make lint       # Check linting with Biome
 make check      # Run both formatting and linting checks
@@ -47,7 +47,7 @@ make check      # Run both formatting and linting checks
 # Run unit tests only
 make test-unit
 
-# Run integration tests only (requires dev server on port 8000)
+# Run integration tests only (starts dev server automatically)
 make test-integration
 
 # Run all tests
@@ -144,4 +144,4 @@ When asked to plan an implementation, follow the standardized process documented
 ## Development Constraints
 
 ### Server Management
-- Claude should never start or kill the dev server, the user handles that
+- Claude should never start the dev server manually with `make dev`, but can run integration tests (they handle the server automatically)

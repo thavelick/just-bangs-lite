@@ -13,38 +13,31 @@ dev: # Start development server
 
 format: # Format code with Biome
 	@echo "Formatting code.."
-	bunx --bun @biomejs/biome format --write .
+	bun run format
 
 lint: # Check code with Biome (formatting, linting, imports)
 	@echo "Checking code.."
-	bunx --bun @biomejs/biome check .
+	bun run lint
 
 check: # Check formatting and linting with Biome
 	@echo "Checking formatting and linting.."
-	bunx --bun @biomejs/biome check .
-
-test: # Run unit tests with Bun
-	@echo "Running unit tests.."
-	bun test tests/unit
+	bun run check
 
 test-unit: # Run unit tests only
 	@echo "Running unit tests.."
-	bun test tests/unit
+	bun run test:unit
 
 test-coverage: # Run unit tests with coverage
 	@echo "Running unit tests with coverage.."
-	bun test tests/unit --coverage
+	bun run test:coverage
 
 test-integration: # Run integration tests with Playwright
 	@echo "Running integration tests.."
-	bunx playwright test tests/integration
+	bun run test:integration
 
 test-all: # Run both unit and integration tests
 	@echo "Running all tests.."
-	@echo "Running unit tests.."
-	bun test tests/unit
-	@echo "Running integration tests.."
-	bunx playwright test tests/integration
+	bun run test:all
 
 
 # -----------------------------------------------------------
