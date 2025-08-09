@@ -31,6 +31,12 @@ test-coverage: # Run unit tests with coverage
 	@echo "Running unit tests with coverage.."
 	bun run test:coverage
 
+test-coverage-html: # Generate HTML coverage report
+	@echo "Generating HTML coverage report.."
+	bun test tests/unit --coverage --coverage-reporter=lcov
+	genhtml coverage/lcov.info --output-directory coverage/html
+	@echo "Coverage report generated in coverage/html/index.html"
+
 test-integration: # Run integration tests with Playwright
 	@echo "Running integration tests.."
 	bun run test:integration
@@ -45,7 +51,7 @@ test-all: # Run both unit and integration tests
 # command, you need to add it to .PHONY below, otherwise it
 # won't work. E.g. `make run` wouldn't work if you have
 # `run` file in pwd.
-.PHONY: help
+.PHONY: help dev format lint check test-unit test-coverage test-coverage-html test-integration test-all
 
 # -----------------------------------------------------------
 # -----       (Makefile helpers and decoration)      --------
